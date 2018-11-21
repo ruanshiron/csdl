@@ -48,6 +48,7 @@ const styles = theme => ({
   },
 }) 
 
+
 class RecipeReviewCard extends React.Component {
   state = { expanded: false } 
 
@@ -76,8 +77,8 @@ class RecipeReviewCard extends React.Component {
         />
         <CardMedia
           className={classes.media}
-          image="/static/images/cards/paella.jpg"
-          title="Paella dish"
+          image={this.props.pics}
+          title={this.props.name}
         />
         <CardContent>
           <Typography component="p">

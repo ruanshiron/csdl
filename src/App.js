@@ -41,11 +41,11 @@ class App extends Component {
           <Paper className={classes.section} justify='center'>
             <Grid container spacing={8}>
               <Grid item sm={8} xs={8}>
-                <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'}/>
-                <RecipeReviewCard dish={'Thịt rang ruột ngựa'} chef={'Phùng Thế Hùng'}/>
-                <RecipeReviewCard dish={'Xò xào xúc xích'} chef={'Lã Ngọc Dương'}/>
-                <RecipeReviewCard dish={'Lòng lợn, tái nầm'} chef={'Ninh Mạnh Hùng'}/>
-                <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'}/>
+                <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'} pics={'/resource/pictures/3_650384.jpg'}/>
+                <RecipeReviewCard dish={'Thịt rang ruột ngựa'} chef={'Phùng Thế Hùng'} pics={'/resource/pictures/Cach-lam-mon-long-heo-xao-nghe-2-1533718709-579-width500height282.jpg'}/>
+                <RecipeReviewCard dish={'Xò xào xúc xích'} chef={'Lã Ngọc Dương'} pics={'/resource/pictures/123.jpg'}/>
+                <RecipeReviewCard dish={'Lòng lợn, tái nầm'} chef={'Ninh Mạnh Hùng'} pics={'/resource/pictures/hqdefault.jpg'}/>
+                <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'} pics={'/resource/pictures/Cach-lam-mon-long-heo-xao-nghe-2-1533718709-579-width500height282.jpg'}/>
               </Grid>
               <Grid item sm={4} xs={4}>
                 <Paper className={classes.root}>
