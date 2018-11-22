@@ -142,7 +142,7 @@ const tileData = [
   }
 ]
 
-class Dish extends Component {
+class Ingredient extends Component {
   state = {
     value: 0,
   };
@@ -164,7 +164,7 @@ class Dish extends Component {
           <Grid container spacing={16} justify='center'>
             <Grid item>
               <Avatar
-                alt="Rau Muống"
+                alt="Chân gà"
                 src="/resource/pictures/3_650384.jpg"
                 className={classNames(classes.avatar, classes.bigAvatar)}
               />
@@ -173,25 +173,19 @@ class Dish extends Component {
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
                   <Typography variant="h2" gutterBottom>
-                    Rau muống
+                    Chân gà
                   </Typography>
                   <Typography variant="display2" component="h2" gutterBottom>
-                    245 Calories
+                    Nguyên liệu
+                  </Typography>
+                  <Typography variant="display1" component="h2" gutterBottom>
+                    Có trong các món ven đường, ít Calories, ít béo
                   </Typography>
                 </Grid>
                 <Grid item>
-                <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
-                  <AddIcon />
-                </Button>
-                <Button variant="fab" color="secondary" aria-label="Edit" className={classes.button}>
-                  <EditIcon />
-                </Button>
                 <Button variant="extendedFab" aria-label="Delete" className={classes.button}>
-                  <NavigationIcon className={classes.extendedIcon} />
-                  Extended
-                </Button>
-                <Button variant="fab" disabled aria-label="Delete" className={classes.button}>
-                  <DeleteIcon />
+                  <AddIcon className={classes.extendedIcon} />
+                  Favourite
                 </Button>
                 </Grid>
               </Grid>
@@ -206,12 +200,11 @@ class Dish extends Component {
               textColor="primary"
               centered
             >
-              <Tab label="Công thức" />
-              <Tab label="Ảnh" />
-              <Tab label="Đầu bếp" />
+              <Tab label="Món nấu cùng" />
+              <Tab label="Cách chọn" />
             </Tabs>
-            {value === 0 && <TabContainer>Công thức</TabContainer>}
-            {value === 1 && 
+            {value === 1 && <TabContainer>Công thức</TabContainer>}
+            {value === 0 && 
               <div className={classes.root}>
                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
                   {tileData.map(tile => (
@@ -235,8 +228,8 @@ class Dish extends Component {
   }
 }
 
-Dish.Proptypes = {
+Ingredient.Proptypes = {
   classes: Proptypes.object.isRequired,
 }
 
-export default withStyles(styles)(Dish) 
+export default withStyles(styles)(Ingredient) 

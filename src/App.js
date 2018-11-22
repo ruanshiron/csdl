@@ -7,6 +7,8 @@ import Dish from './components/Dish'
 import Header from './components/Header'
 import Explore from './components/Explore';
 import Chef from './components/Chef';
+import Ingredient from './components/Ingredient';
+import Dashboard from './components/Dashboard';
 
 class App extends Component {
 
@@ -24,6 +26,8 @@ class App extends Component {
             <Route path='/dish' component={Dish}/>
             <Route path='/explore' component={Explore}/>
             <Route path='/chef' component={Chef}/>
+            <Route path='/ingredient' component={Ingredient}/>
+            <Route path='/dashboard' component={Dashboard}/>
           </Fragment>
         </Router>
       </Fragment>
