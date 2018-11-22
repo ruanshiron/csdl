@@ -5,6 +5,8 @@ import Proptypes from 'prop-types'
 import Home from './components/Home'
 import Dish from './components/Dish'
 import Header from './components/Header'
+import Explore from './components/Explore';
+import Chef from './components/Chef';
 
 class App extends Component {
 
@@ -20,6 +22,8 @@ class App extends Component {
           <Fragment>
             <Route path='/' exact component={Home}/>
             <Route path='/dish' component={Dish}/>
+            <Route path='/explore' component={Explore}/>
+            <Route path='/chef' component={Chef}/>
           </Fragment>
         </Router>
       </Fragment>
