@@ -95,6 +95,10 @@ class Chef extends Component {
     this.setState({ value });
   };
 
+  componentDidMount() {
+    document.title = "Chef"
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;

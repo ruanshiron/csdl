@@ -1,38 +1,57 @@
-import React from 'react' 
-import PropTypes from 'prop-types' 
-import AppBar from '@material-ui/core/AppBar' 
-import Toolbar from '@material-ui/core/Toolbar' 
-import IconButton from '@material-ui/core/IconButton' 
-import Typography from '@material-ui/core/Typography' 
-import InputBase from '@material-ui/core/InputBase' 
-import Badge from '@material-ui/core/Badge' 
-import MenuItem from '@material-ui/core/MenuItem' 
-import Menu from '@material-ui/core/Menu' 
-import { fade } from '@material-ui/core/styles/colorManipulator' 
-import { withStyles } from '@material-ui/core/styles' 
-import MenuIcon from '@material-ui/icons/Menu' 
+import React, { Component,Fragment } from 'react'
+import { ClickAwayListener, Button, Paper, AppBar, Toolbar, withStyles, Typography, IconButton, InputBase, Popper, Fade, Popover } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search' 
-import AccountCircle from '@material-ui/icons/AccountCircle' 
-import MailIcon from '@material-ui/icons/Mail' 
+import { fade } from '@material-ui/core/styles/colorManipulator' 
+import Badge from '@material-ui/core/Badge' 
 import NotificationsIcon from '@material-ui/icons/Notifications' 
-import MoreIcon from '@material-ui/icons/MoreVert' 
+import AccountCircle from '@material-ui/icons/AccountCircle' 
+import EditIcon from '@material-ui/icons/Edit'
+import ExploreIcon from '@material-ui/icons/Explore'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Avatar from '@material-ui/core/Avatar';
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
   title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
+    display: 'block',
+    marginLeft: theme.spacing.unit * 0,
+    [theme.breakpoints.up('md')]: {
+      marginLeft: theme.spacing.unit * 6,
+      marginRight: theme.spacing.unit * 9,
     },
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
+  },
+
+  text: {
+    paddingTop: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+  },
+
+  list: {
+    marginBottom: theme.spacing.unit * 2,
+  },
+  subHeader: {
+    backgroundColor: theme.palette.background.paper,
+  },
+
+  paper: {
+    paddingBottom: 50,
+    width: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      width: 300,
+    }
+  },
+
+
+  grow: {
+    [theme.breakpoints.up('sm')]: {
+      flexGrow: 1,
+    }
   },
   search: {
     position: 'relative',
@@ -41,186 +60,218 @@ const styles = theme => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing.unit * 2,
+    marginRight: 0,
     marginLeft: 0,
-    width: '100%',
+    width: '32%',
+    flexGrow: 1,
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit * 3,
+      marginLeft: theme.spacing.unit * 0,
       width: 'auto',
     },
   },
   searchIcon: {
-    width: theme.spacing.unit * 9,
+    width: theme.spacing.unit * 5,
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
   },
   inputRoot: {
     color: 'inherit',
-    width: '100%',
+    width: '90%',
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
+    paddingLeft: theme.spacing.unit * 5,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: 200,
     },
+    [theme.breakpoints.down('xs')]: {
+      paddingRight: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit,
+    }
   },
-  sectionDesktop: {
-    display: 'none',
+  section: {
+    marginLeft: 0,
+    marginRight: 0,
     [theme.breakpoints.up('md')]: {
-      display: 'flex',
+      marginRight: theme.spacing.unit * 6,
     },
   },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-}) 
+})
 
-class Header extends React.Component {
+
+const messages = [
+  {
+    id: 1,
+    primary: 'Brunch this week?',
+    secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
+    person: '/static/images/avatar/5.jpg',
+  },
+  {
+    id: 2,
+    primary: 'Birthday Gift',
+    secondary: `Do you have a suggestion for a good present for John on his work
+      anniversary. I am really confused & would love your thoughts on it.`,
+    person: '/static/images/avatar/1.jpg',
+  },
+  {
+    id: 3,
+    primary: 'Recipe to try',
+    secondary: 'I am try out this new BBQ recipe, I think this might be amazing',
+    person: '/static/images/avatar/2.jpg',
+  },
+  {
+    id: 4,
+    primary: 'Yes!',
+    secondary: 'I have the tickets to the ReactConf for this year.',
+    person: '/static/images/avatar/3.jpg',
+  },
+  {
+    id: 5,
+    primary: "Doctor's Appointment",
+    secondary: 'My appointment for the doctor was rescheduled for next Saturday.',
+    person: '/static/images/avatar/4.jpg',
+  },
+  {
+    id: 6,
+    primary: 'Discussion',
+    secondary: `Menus that are generated by the bottom app bar (such as a bottom
+      navigation drawer or overflow menu) open as bottom sheets at a higher elevation
+      than the bar.`,
+    person: '/static/images/avatar/5.jpg',
+  },
+  {
+    id: 7,
+    primary: 'Summer BBQ',
+    secondary: `Who wants to have a cookout this weekend? I just got some furniture
+      for my backyard and would love to fire up the grill.`,
+    person: '/static/images/avatar/1.jpg',
+  },
+];
+
+class Header extends Component {
+
   state = {
     anchorEl: null,
-    mobileMoreAnchorEl: null,
-  } 
+    open: false,
+  }
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget }) 
-  } 
+  handleNotificationClick = event => {
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null }) 
-    this.handleMobileMenuClose() 
-  } 
+  handleNotificationClose = () => {
+    this.setState({
+      anchorEl: null,
+    });
+  };
 
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget }) 
-  } 
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null }) 
-  } 
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state 
-    const { classes } = this.props 
-    const isMenuOpen = Boolean(anchorEl) 
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl) 
-
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
-      </Menu>
-    ) 
-
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMobileMenuClose}
-      >
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    ) 
+    const { classes } = this.props
+    const { anchorEl } = this.state
+    const open = Boolean(anchorEl)
 
     return (
-      <div className={classes.root}>
-        <AppBar position="fixed" color="inherit">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
+      <Fragment>
+      <AppBar>
+        <Toolbar>
+          {/* Phần chữ logo */}
+          <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            logo
+          </Typography>
+          
+          {/* Thanh tìm kiếm */}
+          <div className={classes.grow}/>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Tìm kiếm"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+            />
+          </div>
+          <div className={classes.grow}/>
+          
+          {/* Menu  */}
+          <div className={classes.section}>
+            <IconButton color="inherit">
+                <ExploreIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              logo
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="tìm kiếm"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
+            <IconButton color="inherit">
+                <EditIcon />
+            </IconButton>
+            
+            <IconButton color="inherit" onClick={this.handleNotificationClick}>
+              <Badge 
+                invisible={true}
+                badgeContent={1}
+                color="secondary"
               >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        {renderMenu}
-        {renderMobileMenu}
-      </div>
-    ) 
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+           
+            <IconButton color="inherit">
+              <AccountCircle />
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <ClickAwayListener onClickAway={this.handleNotificationClose}>
+      <Popover
+        id="simple-popper"
+        open={open}
+        anchorEl={anchorEl}
+        onClose={this.handleNotificationClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        style={{height: '80vh'}}
+      >
+        <Paper square className={classes.paper}>
+          <Typography className={classes.text} variant="h5" gutterBottom>
+            Thông báo
+          </Typography>
+          <List className={classes.list}>
+            {messages.map(({ id, primary, secondary, person }) => (
+              <Fragment key={id}>
+                {id === 1 && <ListSubheader className={classes.subHeader}>Hôm nay</ListSubheader>}
+                {id === 3 && <ListSubheader className={classes.subHeader}>Hôm qua</ListSubheader>}
+                <ListItem button>
+                  <Avatar alt="Profile Picture" src={person} />
+                  <ListItemText primary={primary} secondary={secondary} />
+                </ListItem>
+              </Fragment>
+            ))}
+          </List>
+        </Paper>
+      </Popover>
+      </ClickAwayListener>
+      </Fragment>
+    )
   }
 }
 
-Header.propTypes = {
-  classes: PropTypes.object.isRequired,
-} 
-
-export default withStyles(styles)(Header) 
+export default withStyles(styles)(Header)

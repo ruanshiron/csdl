@@ -122,7 +122,7 @@ class Explore extends Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
         <Grid container spacing={40}>
             {cards.map(card => (
-              <Grid item key={card.index} sm={6} md={4} lg={4}>
+              <Grid item key={card.index} xs={12} sm={6} md={4} lg={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
