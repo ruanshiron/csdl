@@ -1,10 +1,9 @@
-import React, { Component,Fragment } from 'react'
-import { ClickAwayListener, Button, Paper, AppBar, Toolbar, withStyles, Typography, IconButton, InputBase, Popper, Fade, Popover } from '@material-ui/core'
+import React, { Component, Fragment } from 'react'
+import { ClickAwayListener, Paper, AppBar, Toolbar, withStyles, Typography, IconButton, InputBase, Popover } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search' 
 import { fade } from '@material-ui/core/styles/colorManipulator' 
 import Badge from '@material-ui/core/Badge' 
 import NotificationsIcon from '@material-ui/icons/Notifications' 
-import AccountCircle from '@material-ui/icons/AccountCircle' 
 import EditIcon from '@material-ui/icons/Edit'
 import ExploreIcon from '@material-ui/icons/Explore'
 import List from '@material-ui/core/List';
@@ -12,6 +11,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Avatar from '@material-ui/core/Avatar';
+import {Link} from 'react-router-dom'
+import FacebookLogin from 'react-facebook-login'
+import { AppID } from '../constants/Common'
+
 
 const styles = theme => ({
   title: {
@@ -160,10 +163,10 @@ const messages = [
 ];
 
 class Header extends Component {
-
   state = {
     anchorEl: null,
     open: false,
+    isLoggedIn: this.props.user.isLoggedIn,
   }
 
   handleNotificationClick = event => {
@@ -178,18 +181,64 @@ class Header extends Component {
     });
   };
 
+  responseFacebook = response => {
+    this.props.actions.facebookLogin({
+      isLoggedIn: true,
+      userID: response.userID,
+      name: response.name,
+      email: response.email,
+      picture: response.picture.data.url
+    });
+  };
+
+  componentDidMount() {
+    console.log(this.props)
+  }
+
+  componentClicked = () => console.log("clicked");
 
   render() {
     const { classes } = this.props
     const { anchorEl } = this.state
+    const { isLoggedIn } = this.props.user
     const open = Boolean(anchorEl)
+
+    let fbContent;
+
+    if (isLoggedIn === true) {
+      fbContent = (
+        <IconButton color="inherit" >
+          <Avatar alt={this.props.user.name} src={this.props.user.picture} />
+        </IconButton>
+      );
+    } else if (isLoggedIn === false) {
+      fbContent = (
+        <Fragment>
+        <div style={{display:'none'}}>
+        <FacebookLogin
+          appId={AppID}
+          autoLoad={true}
+          fields="name,email,picture"
+          onClick={this.componentClicked}
+          callback={this.responseFacebook}
+        />
+        </div>
+        <IconButton color="inherit" >
+          <Avatar alt={this.props.user.name} src={this.props.user.picture} />
+        </IconButton>
+        </Fragment>
+      );
+    } else {
+      fbContent = null
+    }
+
 
     return (
       <Fragment>
       <AppBar>
         <Toolbar>
           {/* Phần chữ logo */}
-          <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+          <Typography className={classes.title} variant="h6" color="inherit" component={Link} to='/' noWrap>
             logo
           </Typography>
           
@@ -211,9 +260,10 @@ class Header extends Component {
           
           {/* Menu  */}
           <div className={classes.section}>
-            <IconButton color="inherit">
-                <ExploreIcon />
+            <IconButton color="inherit" component={Link} to= '/explore'>
+              <ExploreIcon />
             </IconButton>
+
             <IconButton color="inherit">
                 <EditIcon />
             </IconButton>
@@ -227,10 +277,7 @@ class Header extends Component {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-           
-            <IconButton color="inherit">
-              <AccountCircle />
-            </IconButton>
+          {fbContent}
           </div>
         </Toolbar>
       </AppBar>
@@ -249,6 +296,7 @@ class Header extends Component {
           horizontal: 'right',
         }}
         style={{height: '80vh'}}
+        transition
       >
         <Paper square className={classes.paper}>
           <Typography className={classes.text} variant="h5" gutterBottom>

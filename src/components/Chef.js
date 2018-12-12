@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 import { Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper} from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add';
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import NavigationIcon from '@material-ui/icons/Navigation';
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 
