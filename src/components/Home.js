@@ -54,57 +54,16 @@ const styles = theme => ({
 });
 
 class Home extends Component {
+  
+  //Mack Explore to Hone Page
+  componentWillMount() {
+    this.props.history.push('/explore')
+  }
 
   render() {
     const { classes } = this.props;
 
     return (
-      // <div>
-      //   <Header/>
-
-      //   <Grid container justify='center'>
-      //     <Paper className={classes.section} justify='center'>
-      //       <Grid container spacing={8}>
-      //         <Grid item sm={8} xs={8}>
-      //           <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'} pics={'/resource/pictures/3_650384.jpg'}/>
-      //           <RecipeReviewCard dish={'Thịt rang ruột ngựa'} chef={'Phùng Thế Hùng'} pics={'/resource/pictures/Cach-lam-mon-long-heo-xao-nghe-2-1533718709-579-width500height282.jpg'}/>
-      //           <RecipeReviewCard dish={'Xò xào xúc xích'} chef={'Lã Ngọc Dương'} pics={'/resource/pictures/123.jpg'}/>
-      //           <RecipeReviewCard dish={'Lòng lợn, tái nầm'} chef={'Ninh Mạnh Hùng'} pics={'/resource/pictures/hqdefault.jpg'}/>
-      //           <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'} pics={'/resource/pictures/Cach-lam-mon-long-heo-xao-nghe-2-1533718709-579-width500height282.jpg'}/>
-      //         </Grid>
-      //         <Grid item sm={4} xs={4}>
-      //           <Paper className={classes.root}>
-      //             <Grid container spacing={0}>
-      //               <Grid>
-      //                 <Card style={{boxShadow:'none'}}>
-      //                   <CardHeader
-      //                   avatar={
-      //                     <Avatar aria-label="Recipe">
-      //                       V
-      //                     </Avatar>
-      //                   }
-      //                   title='Nguyễn Thế Vinh'
-      //                   subheader='3 star'>
-      //                   </CardHeader>
-      //                 </Card>
-      //               </Grid>
-      //               <Grid>
-      //                 <Card style={{boxShadow:'none'}}>
-      //                     <CardHeader
-      //                     subheader='Today'>
-      //                     </CardHeader>
-      //                   </Card>
-      //               </Grid>
-      //             </Grid>
-      //           </Paper>
-      //         </Grid>
-      //       </Grid>
-      //     </Paper>
-      //   </Grid>
-
-      // </div>
-
-      
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40} justify='center'>

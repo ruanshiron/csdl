@@ -1,23 +1,23 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper} from '@material-ui/core'
+import { IconButton, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper, Badge} from '@material-ui/core'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
+// function TabContainer(props) {
+//   return (
+//     <Typography component="div" style={{ padding: 8 * 3 }}>
+//       {props.children}
+//     </Typography>
+//   );
+// }
 
-TabContainer.Proptypes = {
-  children: Proptypes.node.isRequired,
-}
+// TabContainer.Proptypes = {
+//   children: Proptypes.node.isRequired,
+// }
 
 const styles = theme => ({
   appBar: {
@@ -43,7 +43,7 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(960 + theme.spacing.unit * 3 * 2)]: {
-      width: 960,
+      width: 660,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -70,8 +70,8 @@ const styles = theme => ({
     margin: 10,
   },
   bigAvatar: {
-    width: 240,
-    height: 240,
+    width: 140,
+    height: 140,
   },
   button: {
     margin: theme.spacing.unit,
@@ -81,6 +81,10 @@ const styles = theme => ({
   },
   root: {
     flexGrow: 1,
+  },
+  badge: {
+    left: 10,
+    top: 24
   },
 });
 
@@ -107,7 +111,7 @@ class Chef extends Component {
 
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
-          <Grid container spacing={16} justify='center'>
+            <Grid container spacing={16} justify='center'>
             <Grid item>
               <Avatar
                 className={classNames(classes.avatar, classes.bigAvatar)}
@@ -115,35 +119,56 @@ class Chef extends Component {
                 CHEF  
               </Avatar>
             </Grid>  
+
             <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography variant="h2" gutterBottom>
+              <Grid 
+                justify='center' 
+                item xs container 
+                direction="column" 
+                spacing={16}
+              >
+                <Grid 
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-end"
+                >
+                  <Grid item>
+                  <Typography 
+                    style={{marginLeft: 24}}
+                    variant="display1" 
+                    gutterBottom
+                  >
                     Lã Ngọc Bố
                   </Typography>
-                  <Typography variant="display1" component="h2" gutterBottom>
-                    Nhà hàng 3 con cừu con
-                  </Typography>
+                  </Grid>
                 </Grid>
+
                 <Grid item>
-                <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
-                  <NotificationsIcon />
-                </Button>
-                <Button variant="fab" color="secondary" aria-label="Edit" className={classes.button}>
-                  <EditIcon />
-                </Button>
-                <Button variant="extendedFab" aria-label="Delete" className={classes.button}>
-                  Messenger
-                </Button>
-                <Button variant="fab" disabled aria-label="Delete" className={classes.button}>
-                  <DeleteIcon />
-                </Button>
+
+                  <IconButton aria-label="Cart">
+                    <Badge badgeContent={4} color="primary" classes={{ badge: classes.badge }}>
+                    <EditIcon fontSize="large" />
+                    </Badge>
+                  </IconButton>
+
+                  <IconButton aria-label="Cart">
+                    <Badge badgeContent={4} color="primary" classes={{ badge: classes.badge }}>
+                    <PhotoCameraIcon fontSize="large" />
+                    </Badge>
+                  </IconButton>
+                  <Button variant="fab" color="default" aria-label="Edit" className={classes.button}>
+                    <NotificationsIcon/>
+                  </Button>
+                  <Button variant="extendedFab" aria-label="Delete" className={classes.button}>
+                    Theo dõi
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-          <Divider style={{margin:50}}/>
-          <Paper className={classes.root}>
+          <Divider style={{margin:20}}/>
+          {/* <Paper className={classes.root}>
             <Tabs
               value={this.value}
               onChange={this.handleChange}
@@ -162,7 +187,7 @@ class Chef extends Component {
             {value === 4 && <TabContainer>Item Five</TabContainer>}
             {value === 5 && <TabContainer>Item Six</TabContainer>}
             {value === 6 && <TabContainer>Item Seven</TabContainer>}
-          </Paper>
+          </Paper> */}
         </div>
       </main>
 
