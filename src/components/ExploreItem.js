@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardMedia, CardContent, Typography, CardActions, CardActionArea, Divider, IconButton } from '@material-ui/core';
+import { Card, CardMedia, CardContent, Typography, CardActions, CardActionArea, Divider, IconButton, Badge } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
@@ -25,6 +25,10 @@ const styles = theme => ({
   cardContent: {
     flexGrow: 1,
     height: '100%'
+  },
+  badge: {
+    top: 12,
+    right: -16,
   },
 })
 
@@ -56,9 +60,11 @@ class ExploreItem extends Component {
         <Divider/>
         <CardActions>
           <IconButton size="small" onClick={() => actions.likeRecipe(dish.id)}>
+            <Badge badgeContent={100} classes={{ badge: classes.badge }}>
             {
               dish.liked ? <FavoriteIcon color="secondary"/> : <FavoriteBorderIcon/>
             }
+            </Badge>
           </IconButton>
           <IconButton size="small" onClick={() => actions.bookmarkRecipe(dish.id)}>
             {

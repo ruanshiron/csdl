@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { IconButton, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper, Badge} from '@material-ui/core'
+import { IconButton, Grid, Avatar, Typography, Button, Divider, Badge} from '@material-ui/core'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import EditIcon from '@material-ui/icons/Edit';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
@@ -103,7 +103,7 @@ class Chef extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value } = this.state;
+    //const { value } = this.state;
   
 
     return (
@@ -136,7 +136,7 @@ class Chef extends Component {
                   <Grid item>
                   <Typography 
                     style={{marginLeft: 24}}
-                    variant="display1" 
+                    variant="h1" 
                     gutterBottom
                   >
                     Lã Ngọc Bố

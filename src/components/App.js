@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Proptypes from 'prop-types'
 import Home from './Home'
-import Dish from './Dish'
+import Dish from '../containers/Dish'
 import Header from '../containers/Header'
 import Explore from '../containers/Explore';
 import Chef from './Chef';

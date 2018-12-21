@@ -24,7 +24,7 @@ const styles = theme => ({
 
 class Explore extends Component {
   handleMoreRecipe() {
-    this.props.actions.exploreMoreRecipe(null)
+    this.props.actions.fetchRecipe(2)
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Grow, MenuList, MenuItem, Popper, Fade, ClickAwayListener, Paper, AppBar, Toolbar, withStyles, Typography, IconButton, InputBase, Popover } from '@material-ui/core'
+import { Grow, Popper, ClickAwayListener, Paper, AppBar, Toolbar, withStyles, Typography, IconButton, InputBase } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search' 
 import { fade } from '@material-ui/core/styles/colorManipulator' 
 import Badge from '@material-ui/core/Badge' 
@@ -16,6 +16,7 @@ import FacebookAuth from 'react-facebook-auth'
 import { FaFacebook } from 'react-icons/fa'
 import { AppID } from '../constants/Common'
 import { Scrollbars } from 'react-custom-scrollbars'
+import axios from 'axios'
 
 
 const styles = theme => ({
@@ -132,7 +133,13 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    
+    axios.get('http://localhost:8080/api/test', {hihi: 'test'})
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   MyFacebookButton = ({ onClick }) => (
@@ -260,9 +267,9 @@ class Header extends Component {
               onClick={this.handleNotificationClick}
               buttonRef={ node => {
                 this.anchorEl = node
-              }
-                
-              }>
+              }}
+              disabled={open? true:false}
+            >
               <Badge 
                 invisible={true}
                 badgeContent={1}

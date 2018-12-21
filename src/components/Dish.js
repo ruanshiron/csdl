@@ -1,31 +1,43 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper, GridList, GridListTile} from '@material-ui/core'
+import { InputAdornment, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper, GridList, GridListTile, Card, CardMedia, ButtonBase, TextField } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { withStyles } from '@material-ui/core/styles'
-import Proptypes from 'prop-types'
+import Proptypes, { func } from 'prop-types'
+import CardHeader from '@material-ui/core/CardHeader' 
+import CardContent from '@material-ui/core/CardContent' 
+import CardActions from '@material-ui/core/CardActions' 
+import Collapse from '@material-ui/core/Collapse' 
+import IconButton from '@material-ui/core/IconButton' 
+import red from '@material-ui/core/colors/red' 
+import FavoriteIcon from '@material-ui/icons/Favorite' 
+import BookmarkIcon from '@material-ui/icons/Bookmark' 
+import SendIcon from '@material-ui/icons/Send'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore' 
+import MoreVertIcon from '@material-ui/icons/MoreVert' 
+import NotificationsIcon from '@material-ui/icons/Notifications'
 
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
-
-TabContainer.Proptypes = {
-  children: Proptypes.node.isRequired,
-}
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import classnames from 'classnames' 
+import Ingredient from './Ingredient';
+import recipes from '../reducers/recipes';
 
 const styles = theme => ({
   appBar: {
     position: 'relative',
   },
+  chip: {
+    margin: theme.spacing.unit,
+  },
   icon: {
     marginRight: theme.spacing.unit * 2,
+  },
+  media: {
+    height: 'auto',
+    paddingTop: '56.25%', // 16:9
   },
   heroUnit: {
     backgroundColor: theme.palette.background.paper,
@@ -40,11 +52,11 @@ const styles = theme => ({
   },
   layout: {
     width: 'auto',
-    marginTop: 50,
+    marginTop: theme.spacing.unit * 3,
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(960 + theme.spacing.unit * 3 * 2)]: {
-      width: 960,
+      width: 600,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -53,26 +65,34 @@ const styles = theme => ({
     padding: `${theme.spacing.unit * 8}px 0`,
   },
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    width: '100%',
   },
-  cardMedia: {
+  media: {
     paddingTop: '56.25%', // 16:9
   },
-  cardContent: {
-    flexGrow: 1,
+  actions: {
+    display: 'flex',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginLeft: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      marginRight: -8,
+    },
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing.unit * 6,
   },
   avatar: {
-    margin: 10,
-  },
-  bigAvatar: {
-    width: 240,
-    height: 240,
+    width: 24,
+    height: 24,
   },
   button: {
     margin: theme.spacing.unit,
@@ -85,62 +105,238 @@ const styles = theme => ({
   },
 });
 
+function TabContainer(props) {
+  return (
+    <CardContent>
+      {props.children}
+    </CardContent>
+  );
+}
+
+TabContainer.Proptypes = {
+  children: Proptypes.node.isRequired,
+}
+
+const reipe = {
+  ingredients: [
+    "Gạo",
+    "Muối",
+    "Rau",
+    "Gạo",
+    "Muối",
+    "Rau",
+  ],
+  steps: [
+    {
+      index: 1,
+      text: 'đun sôi nước nóng sadadasd a d as dsd ad asd a dad asdw as sad aw as dasd ws daw as dwf  aw a fasf ewfsda  aw ew af s',
+      images: [
+        '/',
+        '/'
+      ]
+    },
+    {
+      index: 2,
+      text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+      images: [
+        '/',
+        '/'
+      ]
+    },
+    {
+      index: 3,
+      text: 'đun sôi nước nóng',
+      images: [
+        '/',
+        '/'
+      ]
+    }
+  ]
+}
+
 const tileData = [
-  {
-    index: 1,
-    name: 'Tỏi Nướng',
-    description: '236 Calo, Tốt cho sức khỏe',
-    image: '/resource/pictures/hqdefault.jpg'
-  }, 
-  {
-    index: 2,
-    name: 'Cà rốt xào chân rết',
-    description: '1000 Calo, Ngon bổ rẻ',
-    image: '/resource/pictures/2.jpg'
+ {
+    image: '/resource/pictures/8.jpg',
+    title: 'Image',
+    author: 'author',
   },
   {
-    index: 3,
-    name: 'Thịt Nướng Bóng Đêm',
-    description: '23121 Calo, Ăn vào có người yêu',
-    image: '/resource/pictures/3.jpg'
+    image: '/resource/pictures/9.jpg',
+    title: 'Image',
+    author: 'author',
   },
   {
-    index: 4,
-    name: 'Bánh Nướng Ban đêm',
-    description: '414 Calo, Thức ăn cho vua chúa',
-    image: '/resource/pictures/4.jpg'
+    image: '/resource/pictures/6.jpg',
+    title: 'Image',
+    author: 'author',
+  },
+];
+
+const commnents = [
+  {
+    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+    liked: true,
+
   },
   {
-    index: 5,
-    name: 'Ăn cả bàn',
-    description: '1212 Calo, Không thể ăn',
-    image: '/resource/pictures/5.jpg'
+    text: 'Bật lò ở 150 độ trong..',
+    liked: true,
+
   },
   {
-    index: 6,
-    name: 'Bánh Mật Hoa Dâm Bụt',
-    description: '4151 Calo, Khó ăn dễ nấu',
-    image: '/resource/pictures/6.jpg'
+    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+    liked: true,
+
   },
   {
-    index: 7,
-    name: 'Chưa đặt tên',
-    description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
-    image: '/resource/pictures/7.jpg'
+    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+    liked: true,
+
   },
   {
-    index: 8,
-    name: 'Mì Italy',
-    description: '123 Calo, Cùng Shopee pipipi',
-    image: '/resource/pictures/8.jpg'
+    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+    liked: true,
+
   },
   {
-    index: 9,
-    name: 'Bánh mì Chảo - Không bánh',
-    description: '111 Calo, Sale 91%',
-    image: '/resource/pictures/9.jpg'
-  }
+    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+    liked: true,
+
+  },
+  {
+    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
+    liked: true,
+
+  },
 ]
+
+function RecipeContainer(props) {
+  return (
+    <>
+    <CardContent>
+      <Typography variant="headline" gutterBottom>Nguyên liệu</Typography>
+        {
+          props.ingredients.map((ingredient, index) => (
+            <div key={index}>
+            <Chip label={ingredient} variant="outlined" className={props.className}/>
+            </div>
+          ))
+        }
+    </CardContent>
+    <CardContent>
+      <Typography variant="headline" gutterBottom>Các bước</Typography>
+        {
+          props.steps.map(step => (
+            <Grid key={step.index} container spacing={8}>
+              <Grid item>
+                <Chip label={step.index} className={props.className}/>
+              </Grid>
+              <Grid item xs={12} sm container alignItems="center" >
+                <Grid item xs container direction="row" >
+                  <Typography variant="body1" gutterBottom>{step.text}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          ))
+        }
+    </CardContent>
+  </>
+  )
+}
+
+RecipeContainer.Proptypes = {
+  ingredients: Proptypes.array.isRequired,
+}
+
+function SnapsContainer(props) {
+  return (
+    <div style={
+      {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+      }
+    }>
+      <GridList cellHeight={160} cols={3}>
+        {tileData.map(tile => (
+          <GridListTile key={tile.image} cols={1}>
+            <img src={tile.image} alt={tile.title} />
+          </GridListTile>
+        ))}
+        <GridListTile>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+            <IconButton >
+              <PhotoCameraIcon fontSize="large" />
+            </IconButton>
+            </Grid>
+        </GridListTile>
+      </GridList>
+    </div>
+  )
+}
+
+SnapsContainer.Proptypes = {
+  ingredients: Proptypes.array.isRequired,
+}
+
+function CommentsContainer(props) {
+  return (
+    <CardContent>
+      <Grid container spacing={16}>
+        <Grid item >
+          <Avatar style={{height:24, width:24}} src={props.user.picture}/>
+        </Grid>
+        <Grid item xs={12} sm container alignItems="center" >
+          <Grid item xs container direction="row" >
+          <TextField
+            id="outlined-dense"
+            label="Viết bình luận..."
+            margin="dense"
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Button
+                    aria-label="comments"
+                  >
+                    <SendIcon />
+                  </Button>
+                </InputAdornment>
+              ),
+            }}
+          />
+          </Grid>
+        </Grid>
+      </Grid>
+      
+      {
+        commnents.map((comment, index) => (
+          <Grid key= {index} container spacing={16}>
+            <Grid item>
+              <Avatar style={{height:24, width:24}}>4</Avatar>
+            </Grid>
+            <Grid item xs={12} sm container alignItems="center" >
+              <Grid item xs container direction="row" >
+                <Typography variant="body1" gutterBottom>{comment.text}</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        ))
+      }
+    </CardContent>
+  )
+}
+
+CommentsContainer.Proptypes = {
+  ingredients: Proptypes.array.isRequired,
+}
 
 class Dish extends Component {
   state = {
@@ -148,89 +344,82 @@ class Dish extends Component {
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({ value })
   };
 
   render() {
-    const { classes } = this.props;
-    const { value } = this.state;
-  
+    const { classes } = this.props
+    const { value } = this.state
 
     return (
-
-
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
-          <Grid container spacing={16} justify='center'>
-            <Grid item>
-              <Avatar
-                alt="Rau Muống"
-                src="/resource/pictures/3_650384.jpg"
-                className={classNames(classes.avatar, classes.bigAvatar)}
+          <Grid container spacing={8} justify='center'>
+            <Card square className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="/resource/pictures/8.jpg"
+                title="Paella dish"
               />
-            </Grid>  
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography variant="h2" gutterBottom>
-                    Rau muống
-                  </Typography>
-                  <Typography variant="display2" component="h2" gutterBottom>
-                    245 Calories
-                  </Typography>
-                </Grid>
-                <Grid item>
-                <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
-                  <AddIcon />
-                </Button>
-                <Button variant="fab" color="secondary" aria-label="Edit" className={classes.button}>
-                  <EditIcon />
-                </Button>
-                <Button variant="extendedFab" aria-label="Delete" className={classes.button}>
-                  <NavigationIcon className={classes.extendedIcon} />
-                  Extended
-                </Button>
-                <Button variant="fab" disabled aria-label="Delete" className={classes.button}>
-                  <DeleteIcon />
-                </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Divider style={{margin:50}}/>
-          <Paper className={classes.root}>
-            <Tabs
-              value={this.value}
-              onChange={this.handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-            >
-              <Tab label="Công thức" />
-              <Tab label="Ảnh" />
-              <Tab label="Đầu bếp" />
-            </Tabs>
-            {value === 0 && <TabContainer>Công thức</TabContainer>}
-            {value === 1 && 
-              <div className={classes.root}>
-                <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                  {tileData.map(tile => (
-                    <GridListTile key={tile.image} cols={tile.cols || 1}>
-                      <img src={tile.image} alt={tile.name} />
-                    </GridListTile>
-                  ))}
-                </GridList>
-              </div>
-            }
-            {value === 2 && <TabContainer>Đầu bếp</TabContainer>}
-            {value === 3 && <TabContainer>Item Four</TabContainer>}
-            {value === 4 && <TabContainer>Item Five</TabContainer>}
-            {value === 5 && <TabContainer>Item Six</TabContainer>}
-            {value === 6 && <TabContainer>Item Seven</TabContainer>}
-          </Paper>
-        </div>
-      </main>
 
+              <CardContent>
+                <Typography variant="h5" color='primary' >
+                  Rau muống luộc
+                </Typography>
+
+                <Typography variant='body2'>
+                  cho gđ vs bạn bè vào dịp cuối tuần
+                </Typography>
+              </CardContent>
+              
+              <CardHeader
+                avatar={
+                  <Avatar aria-label="Recipe" className={classes.avatar}>
+                    R
+                  </Avatar>
+                }
+                action={
+                  <>
+                  <IconButton >
+                    <FavoriteIcon color="secondary" />
+                  </IconButton>
+                  <IconButton color="primary">
+                    <BookmarkIcon />
+                  </IconButton>
+                  <IconButton style={{marginRight: 10}}>
+                    <NotificationsIcon />
+                  </IconButton>
+                  </>
+                }
+                title="Nguyễn Thế Vinh"
+              />
+              <Divider/>
+              <Tabs
+                value={this.state.value}
+                onChange={this.handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                fullWidth
+              >
+                <Tab label="Công thức" />
+                <Tab label="Hình ảnh" />
+                <Tab label="Bình luận" />
+              </Tabs>
+              <Divider/>
+              
+              {value === 0 && <RecipeContainer ingredients={reipe.ingredients} steps={reipe.steps} className={classes.chip}></RecipeContainer>}
+              {value === 1 && <SnapsContainer  />}
+              {value === 2 && <CommentsContainer user={this.props.user}/>}
+              {
+                console.log(this.props.user.picture)
+              }
+            </Card>
+          </Grid>
+
+
+          
+        </div>
+      </main> 
     ) 
   }
 }

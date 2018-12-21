@@ -172,10 +172,10 @@ class Ingredient extends Component {
                   <Typography variant="h2" gutterBottom>
                     Chân gà
                   </Typography>
-                  <Typography variant="display2" component="h2" gutterBottom>
+                  <Typography variant="h2" component="h2" gutterBottom>
                     Nguyên liệu
                   </Typography>
-                  <Typography variant="display1" component="h2" gutterBottom>
+                  <Typography variant="h1" component="h2" gutterBottom>
                     Có trong các món ven đường, ít Calories, ít béo
                   </Typography>
                 </Grid>
