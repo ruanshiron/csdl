@@ -6,22 +6,41 @@ export const facebookLogin = (user) => ({type: types.FACEBOOK_LOGIN, user})
 
 export const tapMessage = (id) => ({type: types.TAP_MESSAGE, id})
 
-export const likeRecipe = (id) => ({type: types.LIKE_RECIPE, id})
-export const bookmarkRecipe = (id) => ({type: types.BOOKMARK_RECIPE, id})
+export const like = (id) => ({type: types.LIKE, id})
+export const bookmark = (id) => ({type: types.BOOKMARK, id})
 
-export const exploreMoreRecipe = (data) => ({
-  type: types.EXPLORE_MORE_RECIPE, 
+export const explore = (data) => ({
+  type: types.EXPLORE, 
   payload: data
 })
 
-export const fetchRecipe = ids => {
+export const dish = (data) => ({
+  type: types.DISH,
+  payload: data
+})
+
+//API FETCHER
+
+export const fetchExplore = (mode) => {
   return (dispatch) => {
-    return axios.get('http://localhost:8080/api/test', {hihi: 'test'})
+    return axios.get('http://localhost:8080/api/test', {mode})
       .then((response) => {
-        dispatch(exploreMoreRecipe(response.data))
+        dispatch(explore(response.data))
       })
       .catch((err) => {
         throw(err)
       })
     }
+}
+
+export const fetchDish = (id) => {
+  return (dispath) => {
+    return axios.get('http://localhost:8080/api/test', {id})
+      .then(response => {
+        dispath(dish(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
 }

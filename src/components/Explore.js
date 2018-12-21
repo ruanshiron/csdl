@@ -20,24 +20,73 @@ const styles = theme => ({
   cardGrid: {
     padding: `${theme.spacing.unit * 8}px 0`,
   },  
+  button: {
+    margin: theme.spacing.unit,
+    marginBottom: theme.spacing.unit*2,
+  },
 });
 
 class Explore extends Component {
+  state = {
+    value: 1,
+  }
+
   handleMoreRecipe() {
-    this.props.actions.fetchRecipe(2)
+    this.props.actions.fetchExplore(2)
+  }
+
+  handleChangeValue(index) {
+    if (index === this.state.value) {
+      //TODO renew reducer
+
+    }
+
+    this.setState ({
+      value: index
+    })
   }
 
   render() {
-    const { classes, recipes, actions } = this.props;
+    const { classes, explore, actions } = this.props
+    const { value } = this.state
+    const tabs = ["Theo dõi", "HOT", "Mới"]
 
     return (
 
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
+          {
+            tabs.map((tab,index) => (
+              <Button 
+                key={index}
+                size="small" variant="extendedFab" 
+                color={value===index ? "secondary" : "inherit"} 
+                className={classes.button}
+                onClick={() => this.handleChangeValue(index)}
+              >
+                {tab}
+              </Button>
+            ))
+          }
+
           <Grid container spacing={40}>
-            {
-              recipes.map(recipe => (
-                <Grid item key={recipe.id} xs={12} sm={6} md={4} lg={4}>
+            { value === 0 &&
+              explore.follow.map((recipe, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4} lg={4}>
+                  <ExploreItem dish={recipe} actions={actions}></ExploreItem>
+                </Grid>
+              ))
+            }
+            { value === 1 &&
+              explore.hot.map((recipe, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4} lg={4}>
+                  <ExploreItem dish={recipe} actions={actions}></ExploreItem>
+                </Grid>
+              ))
+            }
+            { value === 2 &&
+              explore.new.map((recipe, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4} lg={4}>
                   <ExploreItem dish={recipe} actions={actions}></ExploreItem>
                 </Grid>
               ))
@@ -61,6 +110,7 @@ class Explore extends Component {
 
 Explore.Proptypes = {
   classes: Proptypes.object.isRequired,
+  explore: Proptypes.array.isRequired
 }
 
 export default withStyles(styles)(Explore)

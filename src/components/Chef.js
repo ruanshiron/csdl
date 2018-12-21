@@ -86,6 +86,7 @@ const styles = theme => ({
     left: 10,
     top: 24
   },
+  
 });
 
 class Chef extends Component {

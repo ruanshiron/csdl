@@ -16,7 +16,6 @@ import FacebookAuth from 'react-facebook-auth'
 import { FaFacebook } from 'react-icons/fa'
 import { AppID } from '../constants/Common'
 import { Scrollbars } from 'react-custom-scrollbars'
-import axios from 'axios'
 
 
 const styles = theme => ({
@@ -132,33 +131,23 @@ class Header extends Component {
     anchorEl: null,
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/test', {hihi: 'test'})
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
   MyFacebookButton = ({ onClick }) => (
     <IconButton color="inherit" onClick={ onClick } >
       <FaFacebook/>
     </IconButton>
-  );
+  )
    
   handleNotificationClick = event => {
     this.setState({
       anchorEl: event.currentTarget,
-    });
-  };
+    })
+  }
 
   handleNotificationClose = () => {
     this.setState({
       anchorEl: null,
-    });
-  };
+    })
+  }
 
   authenticate = response => {
     this.props.actions.facebookLogin({
@@ -167,8 +156,8 @@ class Header extends Component {
       name: response.name,
       email: response.email,
       picture: response.picture.data.url
-    });
-  };
+    })
+  }
 
   notificationsPopperRender = (messages, open, anchorEl, classes) => {
     return (
