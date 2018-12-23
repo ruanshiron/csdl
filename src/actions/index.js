@@ -8,6 +8,9 @@ export const tapMessage = (id) => ({type: types.TAP_MESSAGE, id})
 
 export const like = (id) => ({type: types.LIKE, id})
 export const bookmark = (id) => ({type: types.BOOKMARK, id})
+export const comment = (text) => ({type: types.COMMENT, text})
+
+export const follow = (targetID) => ({type: types.FOLLOW, targetID})
 
 export const explore = (data) => ({
   type: types.EXPLORE, 

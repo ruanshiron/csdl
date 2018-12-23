@@ -10,21 +10,20 @@ import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
 
 const styles = theme => ({
   card: {
-    height: '100%',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
   },
   cardActionArea: {
-    flexGrow: 1,
-    height: '100%'
+    objectFit: 'cover',
+    flex: 1
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
     marginTop : 0,
   },
   cardContent: {
-    flexGrow: 1,
-    height: '100%'
+    flex: 1,
   },
   badge: {
     top: 20,
@@ -60,7 +59,7 @@ class ExploreItem extends Component {
         <Divider/>
         <CardActions>
           <IconButton size="small" onClick={() => actions.like(dish.id)}>
-            <Badge badgeContent={1000} classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
+            <Badge badgeContent={dish.hearts} classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.liked ? <FavoriteIcon color="secondary"/> : <FavoriteBorderIcon/>
             }

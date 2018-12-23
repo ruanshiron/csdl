@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Grid, Button} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
-import ExploreItem from './ExploreItem';
+import ExploreItem from './RecipeItem';
 
 const styles = theme => ({
   layout: {
@@ -69,7 +69,7 @@ class Explore extends Component {
             ))
           }
 
-          <Grid container spacing={40}>
+          <Grid container spacing={40} direction='row'>
             { value === 0 &&
               explore.follow.map((recipe, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4} lg={4}>

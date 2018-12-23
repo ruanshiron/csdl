@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { Badge, InputAdornment, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
+import { Paper, Badge, InputAdornment, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 import CardHeader from '@material-ui/core/CardHeader' 
@@ -43,7 +43,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(960 + theme.spacing.unit * 3 * 2)]: {
+    [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
       width: 600,
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -76,8 +76,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 6,
   },
   avatar: {
-    width: 24,
-    height: 24,
+    margin: 0,
   },
   button: {
     margin: theme.spacing.unit,
@@ -94,17 +93,6 @@ const styles = theme => ({
   },
 });
 
-function TabContainer(props) {
-  return (
-    <CardContent>
-      {props.children}
-    </CardContent>
-  );
-}
-
-TabContainer.Proptypes = {
-  children: Proptypes.node.isRequired,
-}
 
 
 function RecipeContainer(props) {
@@ -116,7 +104,7 @@ function RecipeContainer(props) {
         {
           recipe.ingredients.map((ingredient, index) => (
             <div key={index}>
-            <Chip label={ingredient} variant="outlined" className={props.className}/>
+            <Chip label={ingredient} variant="outlined" className={props.className} clickable/>
             </div>
           ))
         }
@@ -128,16 +116,18 @@ function RecipeContainer(props) {
           recipe.steps.map((step, index) => (
             <Grid key={index} container item spacing={8}>
               <Grid item>
-                <Chip label={index + 1} className={props.className}/>
+                <Chip label={index + 1} className={props.className} elevation={4}/>
               </Grid>
               <Grid item xs={12} sm container alignItems="center" >
                 <Grid item xs container direction="row" >
-                  <Typography variant="body1" gutterBottom>{step.text}</Typography>
+                  <Paper style={{margin: 8}} elevation={4}>
+                  <Typography style={{margin: 8}} variant="body1" gutterBottom>{step.text}</Typography>
+                  </Paper>
                 </Grid>
                 <Grid container spacing={8} >
                   {
                     step.images.map((image, i) => (
-                      <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
+                      <Grid item key={i} xs={6} sm={6} md={4} lg={4}>
                         <Card square>
                           <CardActionArea>
                           <CardMedia image={image} style={{paddingTop: '75%', marginTop : 0}} />
@@ -164,28 +154,28 @@ RecipeContainer.Proptypes = {
 function SnapsContainer(props) {
   const {snaps} = props
   return (
+    <>
     <Grid container >
       {
-        snaps.map((image, i) => (
+        snaps.map((snap, i) => (
           <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
             <Card square elevation={0}>
               <CardActionArea>
-              <CardMedia image={image} style={{paddingTop: '100%', marginTop : 0}} />
+              <CardMedia image={snap.src} style={{paddingTop: '100%', marginTop : 0}} />
               </CardActionArea>
             </Card>
           </Grid>
         )) 
       }
-      {
-        <Grid item key="add" xs={12} sm={6} md={4} lg={4}>
-          <Card square elevation={0}>
-            <Grid container justify='center' alignContent='center'>
-            <Button variant="extendedFab" style={{marginTop:'30%', marginBottom:'40%'}}>Thêm ảnh của bạn</Button>
-            </Grid>
-          </Card> 
-        </Grid>
-      }
     </Grid>
+    <Grid container justify='center' alignContent='center'>
+      <input accept="image/*" style={{display:'none'}} id="icon-button-file" type="file" />
+        <label htmlFor="icon-button-file">
+          <Button component="span" variant="extendedFab" style={{marginTop:'30%', marginBottom:'40%'}}>Thêm ảnh của bạn</Button>
+        </label>
+    </Grid>
+
+    </>
   )
 }
 
@@ -194,7 +184,8 @@ SnapsContainer.Proptypes = {
 }
 
 function CommentsContainer(props) {
-  const {comments, user} = props
+  const {comments, user, onKeyPress} = props
+  var commentText = "dsdasd"
   return (
     <CardContent>
       <Grid container spacing={16}>
@@ -209,17 +200,20 @@ function CommentsContainer(props) {
             margin="dense"
             variant="outlined"
             fullWidth
+            multiline
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <Button
                     aria-label="comments"
+                    onClick={() => onKeyPress({key:'Enter', target: {value: commentText}})}
                   >
                     <SendIcon />
                   </Button>
                 </InputAdornment>
               ),
             }}
+            onKeyDown={onKeyPress} 
           />
           </Grid>
         </Grid>
@@ -235,7 +229,9 @@ function CommentsContainer(props) {
             </Grid>
             <Grid item xs sm container alignItems="center" >
               <Grid item xs container direction="row" >
-                <Typography variant="body1" gutterBottom>{comment.text}</Typography>
+                <Paper elevation={1}>
+                <Typography style={{margin:8}} variant="body1" gutterBottom>{comment.text}</Typography>
+                </Paper>
               </Grid>
             </Grid>
           </Grid>
@@ -254,8 +250,37 @@ class Dish extends Component {
     value: 0,
   }
 
+  componentWillMount() {
+    console.log(this.props.match)
+  }
+
   handleChange = (event, value) => {
     this.setState({ value })
+  }
+
+  handleLike = (id) => {
+    this.props.actions.like(id)
+  }
+
+  handleBookmark = (id) => {
+    this.props.actions.bookmark(id)
+  }
+
+  handleFollow = (targetID) => {
+    this.props.actions.follow(targetID)
+  }
+
+  handleCommentKeyPress = (event) => {
+    const {key} = event
+    if (key === 'Enter') {
+      this.props.actions.comment(event.target.value)
+      event.target.value = ''
+      event.preventDefault()
+    }
+  }
+
+  handleAvatarClick = (id) => {
+    this.props.history.push('/chef/' + id)
   }
 
   render() {
@@ -275,36 +300,38 @@ class Dish extends Component {
               />
 
               <CardContent>
-                <Typography variant="h5" color='primary' >
+                <Typography variant="headline" color='primary' >
                   {recipe.name}
                 </Typography>
 
-                <Typography variant='body2'>
+                <Typography variant="subheading">
                   {recipe.description}
                 </Typography>
               </CardContent>
               
               <CardHeader
                 avatar={
-                  <Avatar src={recipe.chef.picture} className={classes.avatar}/>
+                  <IconButton onClick={() => this.handleAvatarClick(recipe.chef.id)}>
+                    <Avatar src={recipe.chef.picture} className={classes.avatar}/>
+                  </IconButton>
                 }
                 action={
                   <>
-                  <IconButton onClick={this.props.actions.fetchDish} >
-                    <Badge badgeContent={1000} classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
+                  <IconButton style={{marginTop: 12}} onClick={() => this.handleLike(recipe.id)} >
+                    <Badge badgeContent={recipe.hearts} classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
                     {
                       recipe.liked ? <FavoriteIcon color="secondary" /> : <FavoriteBorderIcon color="inherit" />
                     }
                     </Badge>
                   </IconButton>
-                  <IconButton >
+                  <IconButton style={{marginTop: 12}} onClick={() => this.handleBookmark(recipe.id)}>
                     <Badge badgeContent="Lưu" classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
                     {
                       recipe.did_bookmark ? <BookmarkIcon color="primary" /> : <BookmarkBorderIcon color="inherit" />
                     }
                     </Badge>
                   </IconButton>
-                  <IconButton style={{marginRight: 10}}>
+                  <IconButton onClick={() => this.handleFollow(recipe.chef.id)} style={{marginRight: 10, marginTop:12}}>
                     <Badge badgeContent="..." classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
                     {
                       recipe.chef.followed ? <NotificationsIcon color="primary"/> :  <NotificationsIcon color="inherit"/>
@@ -313,7 +340,11 @@ class Dish extends Component {
                   </IconButton>
                   </>
                 }
-                title={recipe.chef.name}
+                title={
+                  <Typography variant="subtitle2">
+                    {recipe.chef.name}
+                  </Typography>
+                }
               />
               <Divider/>
               <Tabs
@@ -331,7 +362,7 @@ class Dish extends Component {
               
               {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip}/>}
               {value === 1 && <SnapsContainer  snaps={snaps}/>}
-              {value === 2 && <CommentsContainer user={user} comments={comments}/>}
+              {value === 2 && <CommentsContainer onKeyPress={this.handleCommentKeyPress} user={user} comments={comments}/>}
               
             </Card>
           </Grid>

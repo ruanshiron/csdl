@@ -16,6 +16,7 @@ import FacebookAuth from 'react-facebook-auth'
 import { FaFacebook } from 'react-icons/fa'
 import { AppID } from '../constants/Common'
 import { Scrollbars } from 'react-custom-scrollbars'
+import { withRouter } from 'react-router-dom'
 
 
 const styles = theme => ({
@@ -201,6 +202,7 @@ class Header extends Component {
   }
 
   linkToChef = () => {
+    this.props.history.push("/chef/"+this.props.user.userID.toString())
   }
 
   componentClicked = () => console.log("clicked");
@@ -289,4 +291,4 @@ class Header extends Component {
   }
 }
 
-export default withStyles(styles)(Header)
+export default withRouter(withStyles(styles)(Header))

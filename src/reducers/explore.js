@@ -73,7 +73,6 @@ let concatAndDeDuplicateObjectsDeep = (p, ...arrs) => [ ...new Set( [].concat(..
 export default function explore(state = initialState, action) {
   switch (action.type) {
     case LIKE:
-      console.log('LIKE ID: ' + action.id)
       return {
         follow: state.follow.map(recipe => (
           recipe.id === action.id ?
@@ -101,7 +100,6 @@ export default function explore(state = initialState, action) {
         ))
       }
     case BOOKMARK:
-      console.log('BOOKMARD ID: ' + action.id)
       return {
         follow: state.follow.map(recipe => (
           recipe.id === action.id ?
