@@ -11,6 +11,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
 import SendIcon from '@material-ui/icons/Send'
+import EditIcon from '@material-ui/icons/Edit'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 
 const styles = theme => ({
@@ -90,6 +91,19 @@ const styles = theme => ({
   badge: {
     top: 20,
     right: 1,
+  },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+    [theme.breakpoints.up('sm')] : {
+      bottom: theme.spacing.unit * 2,
+      right: theme.spacing.unit * 4,
+    },
+    [theme.breakpoints.up('md')] : {
+      bottom: theme.spacing.unit * 2,
+      right: theme.spacing.unit * 18,
+    }
   },
 });
 
@@ -201,18 +215,18 @@ function CommentsContainer(props) {
             variant="outlined"
             fullWidth
             multiline
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Button
-                    aria-label="comments"
-                    onClick={() => onKeyPress({key:'Enter', target: {value: commentText}})}
-                  >
-                    <SendIcon />
-                  </Button>
-                </InputAdornment>
-              ),
-            }}
+            // InputProps={{
+            //   endAdornment: (
+            //     <InputAdornment position="end">
+            //       <Button
+            //         aria-label="comments"
+            //         onClick={() => onKeyPress({key:'Enter', target: {value: commentText}})}
+            //       >
+            //         <SendIcon />
+            //       </Button>
+            //     </InputAdornment>
+            //   ),
+            // }}
             onKeyDown={onKeyPress} 
           />
           </Grid>
@@ -367,8 +381,9 @@ class Dish extends Component {
             </Card>
           </Grid>
 
-
-          
+          <Button variant='fab' color='primary' className={classes.fab}>
+            <EditIcon/>
+          </Button>
         </div>
       </main> 
     ) 

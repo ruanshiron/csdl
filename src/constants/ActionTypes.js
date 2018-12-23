@@ -7,8 +7,11 @@ export const BOOKMARK = 'BOOKMARK'
 export const COMMENT = 'COMMENT'
 export const SNAP = 'SNAP'
 
+export const POST = 'POST'
+
 export const FOLLOW = 'FOLLOW'
 
 export const EXPLORE = 'EXPLORE'
 export const DISH = 'DISH'
 export const CHEF = 'CHEF'
+export const EDIT = 'EDIT'

@@ -1,6 +1,8 @@
 import * as types from '../constants/ActionTypes'
 import axios from 'axios'
 
+const API = 'http://localhost:8080/api/'
+
 
 export const facebookLogin = (user) => ({type: types.FACEBOOK_LOGIN, user})
 
@@ -12,6 +14,8 @@ export const comment = (text) => ({type: types.COMMENT, text})
 
 export const follow = (targetID) => ({type: types.FOLLOW, targetID})
 
+export const post = (data) => ({type: types.POST, data})
+
 export const explore = (data) => ({
   type: types.EXPLORE, 
   payload: data
@@ -22,11 +26,21 @@ export const dish = (data) => ({
   payload: data
 })
 
+export const chef = (data) => ({
+  type: types.CHEF,
+  payload: data
+})
+
+export const edit = (data) => ({
+  type: types.EDIT,
+  payload: data
+})
+
 //API FETCHER
 
 export const fetchExplore = (mode) => {
   return (dispatch) => {
-    return axios.get('http://localhost:8080/api/test', {mode})
+    return axios.get(API + 'explore', {mode})
       .then((response) => {
         dispatch(explore(response.data))
       })
@@ -36,11 +50,84 @@ export const fetchExplore = (mode) => {
     }
 }
 
-export const fetchDish = (id) => {
+export const fetchDish = (data) => {
   return (dispath) => {
-    return axios.get('http://localhost:8080/api/test', {id})
+    return axios.get(API + 'dish', {data})
       .then(response => {
         dispath(dish(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchChef = (data) => {
+  return (dispath) => {
+    return axios.get(API + 'dish', {data})
+      .then(response => {
+        dispath(chef(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchLike = (data) => {
+  return (dispath) => {
+    return axios.get(API + 'dish', {data})
+      .then(response => {
+        dispath(like(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchBookmark = (data) => {
+  return (dispath) => {
+    return axios.get(API + 'bookmark', {data})
+      .then(response => {
+        dispath(bookmark(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchFollow = (data) => {
+  return (dispath) => {
+    return axios.get(API + 'follow', {data})
+      .then(response => {
+        dispath(follow(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+
+export const fetchComment = (data) => {
+  return (dispath) => {
+    return axios.get(API + 'comment', {data})
+      .then(response => {
+        dispath(comment(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchPost = (data) => {
+  return (dispath) => {
+    return axios.get(API + 'comment', {data})
+      .then(response => {
+        dispath(comment(response.data))
       })
       .catch(err => {
         throw(err)

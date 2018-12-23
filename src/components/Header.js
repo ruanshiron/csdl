@@ -247,8 +247,8 @@ class Header extends Component {
               <ExploreIcon />
             </IconButton>
 
-            <IconButton color="inherit">
-                <EditIcon />
+            <IconButton color="inherit" component={Link} to= '/edit/21'>
+              <EditIcon />
             </IconButton>
 
             {this.notificationsPopperRender(messages, open, anchorEl, classes)}
