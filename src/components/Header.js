@@ -16,7 +16,7 @@ import FacebookAuth from 'react-facebook-auth'
 import { FaFacebook } from 'react-icons/fa'
 import { AppID } from '../constants/Common'
 import { Scrollbars } from 'react-custom-scrollbars'
-import axios from 'axios'
+import { withRouter } from 'react-router-dom'
 
 
 const styles = theme => ({
@@ -132,33 +132,23 @@ class Header extends Component {
     anchorEl: null,
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/test', {hihi: 'test'})
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
   MyFacebookButton = ({ onClick }) => (
     <IconButton color="inherit" onClick={ onClick } >
       <FaFacebook/>
     </IconButton>
-  );
+  )
    
   handleNotificationClick = event => {
     this.setState({
       anchorEl: event.currentTarget,
-    });
-  };
+    })
+  }
 
   handleNotificationClose = () => {
     this.setState({
       anchorEl: null,
-    });
-  };
+    })
+  }
 
   authenticate = response => {
     this.props.actions.facebookLogin({
@@ -167,8 +157,8 @@ class Header extends Component {
       name: response.name,
       email: response.email,
       picture: response.picture.data.url
-    });
-  };
+    })
+  }
 
   notificationsPopperRender = (messages, open, anchorEl, classes) => {
     return (
@@ -212,6 +202,7 @@ class Header extends Component {
   }
 
   linkToChef = () => {
+    this.props.history.push("/chef/"+this.props.user.userID.toString())
   }
 
   componentClicked = () => console.log("clicked");
@@ -256,8 +247,8 @@ class Header extends Component {
               <ExploreIcon />
             </IconButton>
 
-            <IconButton color="inherit">
-                <EditIcon />
+            <IconButton color="inherit" component={Link} to= '/edit/21'>
+              <EditIcon />
             </IconButton>
 
             {this.notificationsPopperRender(messages, open, anchorEl, classes)}
@@ -300,4 +291,4 @@ class Header extends Component {
   }
 }
 
-export default withStyles(styles)(Header)
+export default withRouter(withStyles(styles)(Header))

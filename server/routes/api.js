@@ -13,57 +13,121 @@ router.get('/', (req, res) => {
   res.send('noop')
 })
 
-router.get('/test' ,(req, res) => {
-  if (req.hihi = 'test') {
-    const cards = [
-      {
-        id: 1,
-        name: 'Tỏi Nướng',
-        description: '236 Calo, Tốt cho sức khỏe',
-        image: '/resource/pictures/hqdefault.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      }, 
-      {
-        id: 2,
-        name: 'Cà rốt xào chân rết',
-        description: '1000 Calo, Ngon bổ rẻ',
-        image: '/resource/pictures/2.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
+router.post('/dish' ,(req, res) => {
+  const initialStae = {
+    recipe: {
+      id: null,
+      name:"",
+      desciption: "",
+      picture: "",
+      ingredients: [
+        "",
+        ""
+      ],
+      steps: [
+        {
+          text: "hfaodhf ajdk jakdjf kajekn knfmanjhflwfjanmnvkhjajkjfwlkfjlkamdk",
+          images: [
+            "https://pbs.twimg.com/profile_images/748953502970441728/5cVwlxPU_400x400.jpg",
+            "https://image.dhgate.com/0x0/f2/albu/g4/M00/46/8B/rBVaEFdXeY-AVdYyAAJ8WYBS9mE880.jpg",
+  
+          ]
+        },
+        {
+          text: "",
+          images: [
+            "",
+            ""
+          ]
+        }
+      ],
+      created_at: "",
+      chef: {
+        id: null,
+        name: "",
+        picture: "",
+        followed: true
       },
+      liked: false,
+      did_bookmark: false,
+    },
+    snaps: [
+      "https://media3.s-nbcnews.com/j/MSNBC/Components/Video/201808/tdy_food_klg_chicken_180828_1920x1080.today-inline-vid-featured-desktop.jpg",
+      "https://api.norecipes.com/wp-content/uploads/2018/08/teriyaki-chicken-recipe_007.jpg",
+      "https://img.delicious.com.au/i3GozJrz/w759-h506-cfill/del/2017/05/one-pot-butter-chicken-with-dill-yoghurt-46876-2.jpg",
+      "https://www.cbc.ca/food/content/images/recipes/WinterVegPie.jpg",
+    ],
+    comments: [
       {
-        id: 3,
-        name: 'Thịt Nướng Bóng Đêm',
-        description: '23121 Calo, Ăn vào có người yêu',
-        image: '/resource/pictures/3.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
-      {
-        id: 4,
-        name: 'Bánh Nướng Ban đêm',
-        description: '414 Calo, Thức ăn cho vua chúa',
-        image: '/resource/pictures/4.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
-      {
-        id: 5,
-        name: 'Ăn cả bàn',
-        description: '1212 Calo, Không thể ăn',
-        image: '/resource/pictures/5.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
+        chef: {
+          id: null,
+          picture: "https://img-global.cpcdn.com/005_steps/ff1a4f8e0519f866/480x360cq70/photo.jpg",
+        },
+        text: "21212",
+        created_at: "",
+      }
     ]
-    
-    res.send(cards)
   }
+    
+  res.send(initialStae)
 })
+
+router.post('/explore' ,(req, res) => {
+  console.log(req.body)
+  const initialStae =  {
+    follow:  [
+      {
+        id: 10,
+        name: 'Bánh Mật Hoa Dâm Bụt',
+        description: '4151 Calo, Khó ăn dễ nấu',
+        image: '/resource/pictures/6.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      },
+      {
+        id: 7,
+        name: 'Chưa đặt tên',
+        description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
+        image: '/resource/pictures/7.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      },
+      {
+        id: 8,
+        name: 'Mì Italy',
+        description: '123 Calo, Cùng Shopee pipipi',
+        image: '/resource/pictures/8.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      },
+      {
+        id: 9,
+        name: 'Bánh mì Chảo - Không bánh',
+        description: '111 Calo, Sale 91%',
+        image: '/resource/pictures/9.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      }
+    ],
+    hot: [
+      
+    ],
+    new: [
+
+    ]
+  }
+    
+  res.send(initialStae)
+})
+
+router.post('/edit' ,(req, res) => {
+  console.log(req.body)
+    
+  res.redirect('https://localhost:3000/chef/')
+})
+    
 

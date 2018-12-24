@@ -10,25 +10,24 @@ import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
 
 const styles = theme => ({
   card: {
-    height: '100%',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
   },
   cardActionArea: {
-    flexGrow: 1,
-    height: '100%'
+    objectFit: 'cover',
+    flex: 1
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
     marginTop : 0,
   },
   cardContent: {
-    flexGrow: 1,
-    height: '100%'
+    flex: 1,
   },
   badge: {
-    top: 12,
-    right: -16,
+    top: 20,
+    right: 1,
   },
 })
 
@@ -59,17 +58,19 @@ class ExploreItem extends Component {
         </CardActionArea>
         <Divider/>
         <CardActions>
-          <IconButton size="small" onClick={() => actions.likeRecipe(dish.id)}>
-            <Badge badgeContent={100} classes={{ badge: classes.badge }}>
+          <IconButton size="small" onClick={() => actions.like(dish.id)}>
+            <Badge badgeContent={dish.hearts} classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.liked ? <FavoriteIcon color="secondary"/> : <FavoriteBorderIcon/>
             }
             </Badge>
           </IconButton>
-          <IconButton size="small" onClick={() => actions.bookmarkRecipe(dish.id)}>
+          <IconButton size="small" onClick={() => actions.bookmark(dish.id)}>
+            <Badge badgeContent="Lưu" classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.bookmark ? <BookmarkIcon color="primary"/> : <BookmarkBorderIcon/>
             }
+            </Badge>
           </IconButton>
         </CardActions>
       </Card>

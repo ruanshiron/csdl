@@ -2,8 +2,16 @@ export const FACEBOOK_LOGIN = 'FACEBOOK_LOGIN'
 
 export const TAP_MESSAGE = 'TAP_MESSAGE'
 
-export const LIKE_RECIPE = 'LIKE_RECIPE'
-export const BOOKMARK_RECIPE = 'BOOKMARK_RECIPE'
+export const LIKE = 'LIKE'
+export const BOOKMARK = 'BOOKMARK'
+export const COMMENT = 'COMMENT'
+export const SNAP = 'SNAP'
 
-export const EXPLORE_MORE_RECIPE = 'EXPLORE_MORE_RECIPE'
-export const LOAD_RECIPE = 'LOAD_RECIPE'
+export const POST = 'POST'
+
+export const FOLLOW = 'FOLLOW'
+
+export const EXPLORE = 'EXPLORE'
+export const DISH = 'DISH'
+export const CHEF = 'CHEF'
+export const EDIT = 'EDIT'

@@ -1,29 +1,17 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { InputAdornment, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Paper, GridList, GridListTile, Card, CardMedia, ButtonBase, TextField } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import { Paper, Badge, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import Proptypes, { func } from 'prop-types'
+import Proptypes from 'prop-types'
 import CardHeader from '@material-ui/core/CardHeader' 
 import CardContent from '@material-ui/core/CardContent' 
-import CardActions from '@material-ui/core/CardActions' 
-import Collapse from '@material-ui/core/Collapse' 
 import IconButton from '@material-ui/core/IconButton' 
-import red from '@material-ui/core/colors/red' 
-import FavoriteIcon from '@material-ui/icons/Favorite' 
-import BookmarkIcon from '@material-ui/icons/Bookmark' 
-import SendIcon from '@material-ui/icons/Send'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore' 
-import MoreVertIcon from '@material-ui/icons/MoreVert' 
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
+import EditIcon from '@material-ui/icons/Edit'
 import NotificationsIcon from '@material-ui/icons/Notifications'
-
-import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
-import classnames from 'classnames' 
-import Ingredient from './Ingredient';
-import recipes from '../reducers/recipes';
 
 const styles = theme => ({
   appBar: {
@@ -55,7 +43,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(960 + theme.spacing.unit * 3 * 2)]: {
+    [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
       width: 600,
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -66,9 +54,6 @@ const styles = theme => ({
   },
   card: {
     width: '100%',
-  },
-  media: {
-    paddingTop: '56.25%', // 16:9
   },
   actions: {
     display: 'flex',
@@ -91,8 +76,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 6,
   },
   avatar: {
-    width: 24,
-    height: 24,
+    margin: 0,
   },
   button: {
     margin: theme.spacing.unit,
@@ -103,142 +87,74 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+  badge: {
+    top: 20,
+    right: 1,
+  },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+    [theme.breakpoints.up('sm')] : {
+      bottom: theme.spacing.unit * 2,
+      right: theme.spacing.unit * 4,
+    },
+    [theme.breakpoints.up('md')] : {
+      bottom: theme.spacing.unit * 2,
+      right: theme.spacing.unit * 18,
+    }
+  },
 });
 
-function TabContainer(props) {
-  return (
-    <CardContent>
-      {props.children}
-    </CardContent>
-  );
-}
 
-TabContainer.Proptypes = {
-  children: Proptypes.node.isRequired,
-}
-
-const reipe = {
-  ingredients: [
-    "Gạo",
-    "Muối",
-    "Rau",
-    "Gạo",
-    "Muối",
-    "Rau",
-  ],
-  steps: [
-    {
-      index: 1,
-      text: 'đun sôi nước nóng sadadasd a d as dsd ad asd a dad asdw as sad aw as dasd ws daw as dwf  aw a fasf ewfsda  aw ew af s',
-      images: [
-        '/',
-        '/'
-      ]
-    },
-    {
-      index: 2,
-      text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-      images: [
-        '/',
-        '/'
-      ]
-    },
-    {
-      index: 3,
-      text: 'đun sôi nước nóng',
-      images: [
-        '/',
-        '/'
-      ]
-    }
-  ]
-}
-
-const tileData = [
- {
-    image: '/resource/pictures/8.jpg',
-    title: 'Image',
-    author: 'author',
-  },
-  {
-    image: '/resource/pictures/9.jpg',
-    title: 'Image',
-    author: 'author',
-  },
-  {
-    image: '/resource/pictures/6.jpg',
-    title: 'Image',
-    author: 'author',
-  },
-];
-
-const commnents = [
-  {
-    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-    liked: true,
-
-  },
-  {
-    text: 'Bật lò ở 150 độ trong..',
-    liked: true,
-
-  },
-  {
-    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-    liked: true,
-
-  },
-  {
-    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-    liked: true,
-
-  },
-  {
-    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-    liked: true,
-
-  },
-  {
-    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-    liked: true,
-
-  },
-  {
-    text: 'Bật lò ở 150 độ trong. Cho đường vào nồi để lửa nhỏ, quấy đều cho tan đều sau khi đường chuyển màu cánh gián nhạt thì bắc ra múc dần vào hũ. Vì nồi kim loại nên trong thời gian múc đường ngả dần sang nâu cánh gián tuyệt đẹp. Sau đó cho các hũ vào tủ lạnh cho caramen đông hẳn.',
-    liked: true,
-
-  },
-]
 
 function RecipeContainer(props) {
+  const { recipe } = props
   return (
     <>
     <CardContent>
       <Typography variant="headline" gutterBottom>Nguyên liệu</Typography>
         {
-          props.ingredients.map((ingredient, index) => (
+          recipe.ingredients.map((ingredient, index) => (
             <div key={index}>
-            <Chip label={ingredient} variant="outlined" className={props.className}/>
+            <Chip label={ingredient} variant="outlined" className={props.className} clickable/>
             </div>
           ))
         }
     </CardContent>
     <CardContent>
       <Typography variant="headline" gutterBottom>Các bước</Typography>
+        <Grid container spacing={16}>
         {
-          props.steps.map(step => (
-            <Grid key={step.index} container spacing={8}>
+          recipe.steps.map((step, index) => (
+            <Grid key={index} container item spacing={8}>
               <Grid item>
-                <Chip label={step.index} className={props.className}/>
+                <Chip label={index + 1} className={props.className} elevation={4}/>
               </Grid>
               <Grid item xs={12} sm container alignItems="center" >
                 <Grid item xs container direction="row" >
-                  <Typography variant="body1" gutterBottom>{step.text}</Typography>
+                  <Paper style={{margin: 8}} elevation={4}>
+                  <Typography style={{margin: 8}} variant="body1" gutterBottom>{step.text}</Typography>
+                  </Paper>
+                </Grid>
+                <Grid container spacing={8} >
+                  {
+                    step.images.map((image, i) => (
+                      <Grid item key={i} xs={6} sm={6} md={4} lg={4}>
+                        <Card square>
+                          <CardActionArea>
+                          <CardMedia image={image} style={{paddingTop: '75%', marginTop : 0}} />
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                    )) 
+                  }
                 </Grid>
               </Grid>
             </Grid>
           ))
         }
+        </Grid>
     </CardContent>
   </>
   )
@@ -249,35 +165,30 @@ RecipeContainer.Proptypes = {
 }
 
 function SnapsContainer(props) {
+  const {snaps} = props
   return (
-    <div style={
+    <>
+    <Grid container >
       {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
+        snaps.map((snap, i) => (
+          <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
+            <Card square elevation={0}>
+              <CardActionArea>
+              <CardMedia image={snap.src} style={{paddingTop: '100%', marginTop : 0}} />
+              </CardActionArea>
+            </Card>
+          </Grid>
+        )) 
       }
-    }>
-      <GridList cellHeight={160} cols={3}>
-        {tileData.map(tile => (
-          <GridListTile key={tile.image} cols={1}>
-            <img src={tile.image} alt={tile.title} />
-          </GridListTile>
-        ))}
-        <GridListTile>
-        <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-        >
-            <IconButton >
-              <PhotoCameraIcon fontSize="large" />
-            </IconButton>
-            </Grid>
-        </GridListTile>
-      </GridList>
-    </div>
+    </Grid>
+    <Grid container justify='center' alignContent='center'>
+      <input accept="image/*" style={{display:'none'}} id="icon-button-file" type="file" />
+        <label htmlFor="icon-button-file">
+          <Button component="span" variant="extendedFab" style={{marginTop:'30%', marginBottom:'40%'}}>Thêm ảnh của bạn</Button>
+        </label>
+    </Grid>
+
+    </>
   )
 }
 
@@ -286,13 +197,14 @@ SnapsContainer.Proptypes = {
 }
 
 function CommentsContainer(props) {
+  const {comments, user, onKeyPress} = props
   return (
     <CardContent>
       <Grid container spacing={16}>
         <Grid item >
-          <Avatar style={{height:24, width:24}} src={props.user.picture}/>
+          <Avatar style={{top:-8, marginTop:'60%',height:24, width:24}} src={user.picture}/>  
         </Grid>
-        <Grid item xs={12} sm container alignItems="center" >
+        <Grid item xs sm container alignItems="center" >
           <Grid item xs container direction="row" >
           <TextField
             id="outlined-dense"
@@ -300,31 +212,38 @@ function CommentsContainer(props) {
             margin="dense"
             variant="outlined"
             fullWidth
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Button
-                    aria-label="comments"
-                  >
-                    <SendIcon />
-                  </Button>
-                </InputAdornment>
-              ),
-            }}
+            multiline
+            // InputProps={{
+            //   endAdornment: (
+            //     <InputAdornment position="end">
+            //       <Button
+            //         aria-label="comments"
+            //         onClick={() => onKeyPress({key:'Enter', target: {value: commentText}})}
+            //       >
+            //         <SendIcon />
+            //       </Button>
+            //     </InputAdornment>
+            //   ),
+            // }}
+            onKeyDown={onKeyPress} 
           />
           </Grid>
         </Grid>
       </Grid>
       
       {
-        commnents.map((comment, index) => (
+        comments.map((comment, index) => (
           <Grid key= {index} container spacing={16}>
             <Grid item>
-              <Avatar style={{height:24, width:24}}>4</Avatar>
+              <IconButton style={{height:24, width:24}}>
+                <Avatar src={comment.chef.picture} style={{top:-12,height:24, width:24}}/>
+              </IconButton>
             </Grid>
-            <Grid item xs={12} sm container alignItems="center" >
+            <Grid item xs sm container alignItems="center" >
               <Grid item xs container direction="row" >
-                <Typography variant="body1" gutterBottom>{comment.text}</Typography>
+                <Paper elevation={1}>
+                <Typography style={{margin:8}} variant="body1" gutterBottom>{comment.text}</Typography>
+                </Paper>
               </Grid>
             </Grid>
           </Grid>
@@ -341,15 +260,45 @@ CommentsContainer.Proptypes = {
 class Dish extends Component {
   state = {
     value: 0,
-  };
+  }
+
+  componentWillMount() {
+    console.log(this.props.match)
+  }
 
   handleChange = (event, value) => {
     this.setState({ value })
-  };
+  }
+
+  handleLike = (id) => {
+    this.props.actions.like(id)
+  }
+
+  handleBookmark = (id) => {
+    this.props.actions.bookmark(id)
+  }
+
+  handleFollow = (targetID) => {
+    this.props.actions.follow(targetID)
+  }
+
+  handleCommentKeyPress = (event) => {
+    const {key} = event
+    if (key === 'Enter') {
+      this.props.actions.comment(event.target.value)
+      event.target.value = ''
+      event.preventDefault()
+    }
+  }
+
+  handleAvatarClick = (id) => {
+    this.props.history.push('/chef/' + id)
+  }
 
   render() {
-    const { classes } = this.props
+    const { classes, dish, user } = this.props
     const { value } = this.state
+    const { recipe, snaps, comments } = dish
 
     return (
       <main>
@@ -358,40 +307,56 @@ class Dish extends Component {
             <Card square className={classes.card}>
               <CardMedia
                 className={classes.media}
-                image="/resource/pictures/8.jpg"
-                title="Paella dish"
+                image={recipe.picture}
+                title={recipe.name}
               />
 
               <CardContent>
-                <Typography variant="h5" color='primary' >
-                  Rau muống luộc
+                <Typography variant="headline" color='primary' >
+                  {recipe.name}
                 </Typography>
 
-                <Typography variant='body2'>
-                  cho gđ vs bạn bè vào dịp cuối tuần
+                <Typography variant="subheading">
+                  {recipe.description}
                 </Typography>
               </CardContent>
               
               <CardHeader
                 avatar={
-                  <Avatar aria-label="Recipe" className={classes.avatar}>
-                    R
-                  </Avatar>
+                  <IconButton onClick={() => this.handleAvatarClick(recipe.chef.id)}>
+                    <Avatar src={recipe.chef.picture} className={classes.avatar}/>
+                  </IconButton>
                 }
                 action={
                   <>
-                  <IconButton >
-                    <FavoriteIcon color="secondary" />
+                  <IconButton style={{marginTop: 12}} onClick={() => this.handleLike(recipe.id)} >
+                    <Badge badgeContent={recipe.hearts} classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
+                    {
+                      recipe.liked ? <FavoriteIcon color="secondary" /> : <FavoriteBorderIcon color="inherit" />
+                    }
+                    </Badge>
                   </IconButton>
-                  <IconButton color="primary">
-                    <BookmarkIcon />
+                  <IconButton style={{marginTop: 12}} onClick={() => this.handleBookmark(recipe.id)}>
+                    <Badge badgeContent="Lưu" classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
+                    {
+                      recipe.did_bookmark ? <BookmarkIcon color="primary" /> : <BookmarkBorderIcon color="inherit" />
+                    }
+                    </Badge>
                   </IconButton>
-                  <IconButton style={{marginRight: 10}}>
-                    <NotificationsIcon />
+                  <IconButton onClick={() => this.handleFollow(recipe.chef.id)} style={{marginRight: 10, marginTop:12}}>
+                    <Badge badgeContent="..." classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
+                    {
+                      recipe.chef.followed ? <NotificationsIcon color="primary"/> :  <NotificationsIcon color="inherit"/>
+                    }
+                    </Badge>
                   </IconButton>
                   </>
                 }
-                title="Nguyễn Thế Vinh"
+                title={
+                  <Typography variant="subtitle2">
+                    {recipe.chef.name}
+                  </Typography>
+                }
               />
               <Divider/>
               <Tabs
@@ -407,17 +372,16 @@ class Dish extends Component {
               </Tabs>
               <Divider/>
               
-              {value === 0 && <RecipeContainer ingredients={reipe.ingredients} steps={reipe.steps} className={classes.chip}></RecipeContainer>}
-              {value === 1 && <SnapsContainer  />}
-              {value === 2 && <CommentsContainer user={this.props.user}/>}
-              {
-                console.log(this.props.user.picture)
-              }
+              {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip}/>}
+              {value === 1 && <SnapsContainer  snaps={snaps}/>}
+              {value === 2 && <CommentsContainer onKeyPress={this.handleCommentKeyPress} user={user} comments={comments}/>}
+              
             </Card>
           </Grid>
 
-
-          
+          <Button variant='fab' color='primary' className={classes.fab}>
+            <EditIcon/>
+          </Button>
         </div>
       </main> 
     ) 

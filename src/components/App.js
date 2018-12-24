@@ -6,9 +6,10 @@ import Home from './Home'
 import Dish from '../containers/Dish'
 import Header from '../containers/Header'
 import Explore from '../containers/Explore';
-import Chef from './Chef';
-import Ingredient from './Ingredient';
-import Dashboard from './Dashboard';
+import Chef from '../containers/Chef';
+import Edit from '../containers/Edit'
+// import Ingredient from './Ingredient';
+// import Dashboard from './Dashboard';
 
 class App extends Component {
 
@@ -25,11 +26,12 @@ class App extends Component {
             <Header/>
 
             <Route path='/' exact component={Home}/>
-            <Route path='/dish' component={Dish}/>
             <Route path='/explore' component={Explore}/>
-            <Route path='/chef' component={Chef}/>
-            <Route path='/ingredient' component={Ingredient}/>
-            <Route path='/dashboard' component={Dashboard}/>
+            <Route path='/dish/:id' component={Dish}/>
+            <Route path='/chef/:id' component={Chef}/>
+            <Route path='/edit/:id' component={Edit}/>
+            {/* <Route path='/ingredient' component={Ingredient}/>
+            <Route path='/dashboard' component={Dashboard}/> */}
           </Fragment>
 
         </Router>
