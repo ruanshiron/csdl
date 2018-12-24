@@ -125,9 +125,9 @@ export default function explore(state = initialState, action) {
       }
     case EXPLORE:
       return {
-        follow: concatAndDeDuplicateObjectsDeep('id', state.follow, action.payload),
-        hot: concatAndDeDuplicateObjectsDeep('id', state.hot, action.payload),
-        new: concatAndDeDuplicateObjectsDeep('id', state.new, action.payload)
+        follow: concatAndDeDuplicateObjectsDeep('id', state.follow, action.payload.follow),
+        hot: concatAndDeDuplicateObjectsDeep('id', state.hot, action.payload.hot),
+        new: concatAndDeDuplicateObjectsDeep('id', state.new, action.payload.new)
       }
     default:
       return state

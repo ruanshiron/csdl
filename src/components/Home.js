@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import RecipeReviewCard from './RecipeReviewCard'
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 
@@ -68,11 +67,7 @@ class Home extends Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40} justify='center'>
             <Grid item>
-              <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'} pics={'/resource/pictures/3_650384.jpg'}/>
-              <RecipeReviewCard dish={'Thịt rang ruột ngựa'} chef={'Phùng Thế Hùng'} pics={'/resource/pictures/Cach-lam-mon-long-heo-xao-nghe-2-1533718709-579-width500height282.jpg'}/>
-              <RecipeReviewCard dish={'Xò xào xúc xích'} chef={'Lã Ngọc Dương'} pics={'/resource/pictures/123.jpg'}/>
-              <RecipeReviewCard dish={'Lòng lợn, tái nầm'} chef={'Ninh Mạnh Hùng'} pics={'/resource/pictures/hqdefault.jpg'}/>
-              <RecipeReviewCard dish={'Rau muống luộc'} chef={'Nguyễn Thế Vinh'} pics={'/resource/pictures/Cach-lam-mon-long-heo-xao-nghe-2-1533718709-579-width500height282.jpg'}/>
+              <Typography variant='h1'>404</Typography>
             </Grid>  
           </Grid>
         </div>

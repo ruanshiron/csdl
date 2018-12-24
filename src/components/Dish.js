@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { Paper, Badge, InputAdornment, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
+import { Paper, Badge, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 import CardHeader from '@material-ui/core/CardHeader' 
@@ -10,7 +10,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
-import SendIcon from '@material-ui/icons/Send'
 import EditIcon from '@material-ui/icons/Edit'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 
@@ -199,7 +198,6 @@ SnapsContainer.Proptypes = {
 
 function CommentsContainer(props) {
   const {comments, user, onKeyPress} = props
-  var commentText = "dsdasd"
   return (
     <CardContent>
       <Grid container spacing={16}>

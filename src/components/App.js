@@ -7,7 +7,7 @@ import Dish from '../containers/Dish'
 import Header from '../containers/Header'
 import Explore from '../containers/Explore';
 import Chef from '../containers/Chef';
-import Edit from './Edit'
+import Edit from '../containers/Edit'
 // import Ingredient from './Ingredient';
 // import Dashboard from './Dashboard';
 

@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
   res.send('noop')
 })
 
-router.get('/test' ,(req, res) => {
+router.post('/dish' ,(req, res) => {
   const initialStae = {
     recipe: {
       id: null,
@@ -69,6 +69,65 @@ router.get('/test' ,(req, res) => {
     ]
   }
     
-    res.send(initialStae)
+  res.send(initialStae)
 })
+
+router.post('/explore' ,(req, res) => {
+  console.log(req.body)
+  const initialStae =  {
+    follow:  [
+      {
+        id: 10,
+        name: 'Bánh Mật Hoa Dâm Bụt',
+        description: '4151 Calo, Khó ăn dễ nấu',
+        image: '/resource/pictures/6.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      },
+      {
+        id: 7,
+        name: 'Chưa đặt tên',
+        description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
+        image: '/resource/pictures/7.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      },
+      {
+        id: 8,
+        name: 'Mì Italy',
+        description: '123 Calo, Cùng Shopee pipipi',
+        image: '/resource/pictures/8.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      },
+      {
+        id: 9,
+        name: 'Bánh mì Chảo - Không bánh',
+        description: '111 Calo, Sale 91%',
+        image: '/resource/pictures/9.jpg',
+        hearts: 0,
+        liked: false,
+        bookmark: false,
+      }
+    ],
+    hot: [
+      
+    ],
+    new: [
+
+    ]
+  }
+    
+  res.send(initialStae)
+})
+
+router.post('/edit' ,(req, res) => {
+  console.log(req.body)
+    
+  res.redirect('https://localhost:3000/chef/')
+})
+    
 

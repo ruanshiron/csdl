@@ -1,18 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import classNames from 'classnames'
-import { Badge, InputAdornment, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
+import { InputAdornment, Grid, Typography, Button, Divider, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
-import CardHeader from '@material-ui/core/CardHeader' 
 import CardContent from '@material-ui/core/CardContent' 
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera'
 import SendIcon from '@material-ui/icons/Send'
 import IconButton from '@material-ui/core/IconButton' 
 import CancelIcon from '@material-ui/icons/Cancel'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
-import NotificationsIcon from '@material-ui/icons/Notifications'
 
 const styles = theme => ({
   appBar: {
@@ -120,6 +115,8 @@ const styles = theme => ({
 
 class Edit extends Component {
   state = {
+    name: "",
+    description: "",
     ingredients: [
       "",
     ],
@@ -139,6 +136,20 @@ class Edit extends Component {
     console.log(this.props.match)
   }
 
+  handleTitleOnChange = (e) => {
+    this.setState({
+      name: e.target.value
+    })
+    // this.state.title = e.target.value
+  } 
+
+  handleDescriptionOnChange = (e) => {
+    this.setState({
+      description: e.target.value
+    })
+    // this.state.description = e.target.value
+  }
+
   handleIngredientKeyPress = (event, index) => {
     const {key} = event
     if (key === 'Enter') {
@@ -150,22 +161,46 @@ class Edit extends Component {
       })
       event.preventDefault()
     }
-    else this.state.ingredients[index] = event.target.value + key
+    
+    console.log(this.state.ingredients)
+  }
+
+  handleIngredientOnChange = (event, index) => {
+    var a = this.state.ingredients
+    a[index] = event.target.value 
+
+    this.setState({
+      ingredients: a
+    })
+    
+    console.log(this.state.ingredients)
     
   }
 
+
   handleDeleteIngredient = (event, index) => {
     var a = [...this.state.ingredients]
-    a.splice(index, 1)
-    if (a.length === 0) {
+    
+    if (a.length === 1) {
+      a[index] = ""
+      // this.state.ingredients = a
       this.setState({
-        ingredients: [""]
+        ingredients: a
       })
-    } else 
+      document.getElementById("ingredients" + index.toString()).value = this.state.ingredients[index]
+    } else {
+      a.splice(index, 1)
+      // this.state.ingredients = a
       this.setState({
         ingredients: a,
       })
+    }
     
+    this.state.ingredients.map((value, i) => (
+      document.getElementById("ingredients" + i.toString()).value = this.state.ingredients[i]
+    ))
+
+    console.log(this.state.ingredients)
   }
 
   handleStepKeyPress = (event, index) => {
@@ -188,35 +223,49 @@ class Edit extends Component {
       })
       event.preventDefault()
     }
-    else this.state.steps[index].text = event.target.value + key
 
+  }
+
+  handleStepOnChange = (event, index) => {
+    var a = this.state.steps
+    a[index].text = event.target.value
+    // this.state.steps[index].text = event.target.value
+    this.setState({
+      steps: a
+    })
   }
 
   handleDeleteStep = (event, index) => {
     var a = [...this.state.steps]
-    a.splice(index, 1)
-    console.log(a)
-    if (a.length === 0) {
+    
+    if (a.length === 1) {
+      a[index].text = ""
+      // this.state.steps = a
       this.setState({
-        steps: [
-          {
-          text: "",
-            snaps: [
-              "",
-              "",
-              ""
-            ],
-          }
-        ]
+        steps: a
       })
-    } else 
+      document.getElementById("steps" + index.toString()).value = this.state.steps[index].text
+    } else {
+      a.splice(index, 1)
+      // this.state.steps = a
       this.setState({
         steps: a,
       })
+    }
+    
+    this.state.steps.map((value, i) => (
+      document.getElementById("steps" + i.toString()).value = this.state.steps[i].text
+    ))
 
-      console.log(this.state.steps)
+    console.log(this.state.steps)
   }
 
+  handleOnSubmit = () => {
+    const submitForm = {
+      ...this.state,
+      userID: this.props.user.userID
+    }
+  } 
 
   render() {
     const { classes} = this.props
@@ -227,6 +276,7 @@ class Edit extends Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={8} justify='center'>
             <Card square className={classes.card}>
+            
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
@@ -248,6 +298,7 @@ class Edit extends Component {
 
               <CardContent>
                 <TextField
+                  name="title"
                   id="name"
                   label="Viết tên món..."
                   className={classNames(classes.textField, classes.dense)}
@@ -264,6 +315,7 @@ class Edit extends Component {
                   margin="dense"
                   variant="outlined"
                   fullWidth
+                  onChange={(e) => this.handleTitleOnChange(e)} 
                 />
                 <TextField
                   id="description"
@@ -272,6 +324,7 @@ class Edit extends Component {
                   margin="dense"
                   variant="outlined"
                   fullWidth
+                  onChange={(e) => this.handleDescriptionOnChange(e)} 
                 />
               </CardContent>
               <CardContent>
@@ -281,7 +334,7 @@ class Edit extends Component {
                 {
                   ingredients.map( (text, index) => (
                     <TextField
-                      id="description"
+                      id={"ingredients" + index.toString()}
                       key={index}
                       placeholder="10 tạ Thịt Lợn"
                       helperText="Nhấn Enter để thêm nguyên liệu"
@@ -301,6 +354,7 @@ class Edit extends Component {
                         ),
                       }}
                       onKeyPress={(e) => this.handleIngredientKeyPress(e, index)}
+                      onChange={(e) => this.handleIngredientOnChange(e, index)}
                       autoFocus={index===0? false: true}
                     />
                   ))
@@ -315,8 +369,8 @@ class Edit extends Component {
                   steps.map((step,index) => (
                     <Fragment key={index}>
                     <TextField
-                      id="description"
-                      label="Bước 1"
+                      id={'steps' + index.toString()}
+                      label={ "Bước " + (index+1).toString()}
                       helperText="Nhấn Enter để thêm bước mới, nhấn lại để thêm/thay hình"
                       className={classNames(classes.textField, classes.dense)}
                       margin="dense"
@@ -335,6 +389,7 @@ class Edit extends Component {
                         ),
                       }}
                       onKeyPress={(e) => this.handleStepKeyPress(e, index)}
+                      onChange={(e) => this.handleStepOnChange(e, index)}
                       autoFocus={index===0? false: true}
                     />
                     <Grid container spacing={8}>
@@ -365,12 +420,14 @@ class Edit extends Component {
                 }
                 
               </CardContent>
-              
+
+              <Button onClick={this.handleOnSubmit} variant='fab' color='primary' className={classes.fab}>
+                <SendIcon/>
+              </Button>
+
             </Card>
           </Grid> 
-          <Button variant='fab' color='primary' className={classes.fab}>
-            <SendIcon/>
-          </Button>
+          
         </div>
       </main> 
     ) 

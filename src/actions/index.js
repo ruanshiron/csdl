@@ -38,9 +38,9 @@ export const edit = (data) => ({
 
 //API FETCHER
 
-export const fetchExplore = (mode) => {
+export const fetchExplore = (data) => {
   return (dispatch) => {
-    return axios.get(API + 'explore', {mode})
+    return axios.post(API + 'explore', {data})
       .then((response) => {
         dispatch(explore(response.data))
       })
@@ -52,7 +52,7 @@ export const fetchExplore = (mode) => {
 
 export const fetchDish = (data) => {
   return (dispath) => {
-    return axios.get(API + 'dish', {data})
+    return axios.post(API + 'dish', {data})
       .then(response => {
         dispath(dish(response.data))
       })
@@ -64,7 +64,7 @@ export const fetchDish = (data) => {
 
 export const fetchChef = (data) => {
   return (dispath) => {
-    return axios.get(API + 'dish', {data})
+    return axios.post(API + 'dish', {data})
       .then(response => {
         dispath(chef(response.data))
       })
@@ -76,7 +76,7 @@ export const fetchChef = (data) => {
 
 export const fetchLike = (data) => {
   return (dispath) => {
-    return axios.get(API + 'dish', {data})
+    return axios.post(API + 'dish', {data})
       .then(response => {
         dispath(like(response.data))
       })
@@ -88,7 +88,7 @@ export const fetchLike = (data) => {
 
 export const fetchBookmark = (data) => {
   return (dispath) => {
-    return axios.get(API + 'bookmark', {data})
+    return axios.post(API + 'bookmark', {data})
       .then(response => {
         dispath(bookmark(response.data))
       })
@@ -100,7 +100,7 @@ export const fetchBookmark = (data) => {
 
 export const fetchFollow = (data) => {
   return (dispath) => {
-    return axios.get(API + 'follow', {data})
+    return axios.post(API + 'follow', {data})
       .then(response => {
         dispath(follow(response.data))
       })
@@ -113,7 +113,7 @@ export const fetchFollow = (data) => {
 
 export const fetchComment = (data) => {
   return (dispath) => {
-    return axios.get(API + 'comment', {data})
+    return axios.post(API + 'comment', {data})
       .then(response => {
         dispath(comment(response.data))
       })
@@ -125,7 +125,7 @@ export const fetchComment = (data) => {
 
 export const fetchPost = (data) => {
   return (dispath) => {
-    return axios.get(API + 'comment', {data})
+    return axios.post(API + 'comment', {data})
       .then(response => {
         dispath(comment(response.data))
       })

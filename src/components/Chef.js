@@ -4,6 +4,7 @@ import { Card, CardMedia, Grid, Avatar, Typography, Button, Divider, CardActionA
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import EditIcon from '@material-ui/icons/Edit';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import BookmarkIcon from '@material-ui/icons/Bookmark'
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 import ExploreItem from './RecipeItem';
@@ -183,9 +184,9 @@ class Chef extends Component {
   render() {
     const { classes, actions } = this.props;
     const { value } = this.state;
-    const tabs = ["Công thức", "Snaps"]
+    const tabs = ["Công thức", "Snaps", "Bookmarks"]
 
-    const {chef, recipes, snaps} = this.props.chef
+    const {chef, recipes, snaps, bookmarks} = this.props.chef
 
     return (
       <main>
@@ -235,7 +236,9 @@ class Chef extends Component {
                       color={value===index ? "secondary" : "inherit"}
                       onClick={() => this.handleChange(index)}
                     >
-                      {index===0 ? <><EditIcon/> 12</>: <><PhotoCameraIcon/> 12</>}  
+                      {index===0 && <><EditIcon/> 12</>}
+                      {index===1 && <><PhotoCameraIcon/> 12</>}
+                      {index===2 && <><BookmarkIcon/> 12</>}  
                     </Button>
                   ))
                 }
@@ -252,6 +255,7 @@ class Chef extends Component {
           
           {value===0 &&<RecipesContainer recipes={recipes} actions={actions}/>}
           {value===1 &&<SnapsContainer snaps={snaps}/>}
+          {value===2 &&<RecipesContainer recipes={bookmarks} actions={actions}/>}
 
           
         </div>

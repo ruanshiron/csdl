@@ -31,8 +31,8 @@ class Explore extends Component {
     value: 1,
   }
 
-  handleMoreRecipe() {
-    this.props.actions.fetchExplore(2)
+  handleMoreRecipe(value) {
+    this.props.actions.fetchExplore({userID: this.props.user.userID, value})
   }
 
   handleChangeValue(index) {
@@ -95,7 +95,7 @@ class Explore extends Component {
           <Grid container justify="center" style={{padding: 40}}>
             <Button 
               className={classes.moreButton}
-              onClick={() => this.handleMoreRecipe()}
+              onClick={() => this.handleMoreRecipe(value)}
             >
               Xem tiếp
             </Button>

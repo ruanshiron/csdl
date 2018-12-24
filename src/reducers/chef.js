@@ -82,7 +82,36 @@ const initialStae = {
       recipe_id: 8,
       src: "http://imgt.taimienphi.vn/cf/Images/tt/2018/4/24/hinh-anh-anime-dep-2.jpg"
     },
-  ]
+  ],
+  bookmarks: [
+    {
+      id: 7,
+      name: 'Chưa đặt tên',
+      description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
+      image: '/resource/pictures/7.jpg',
+      hearts: 0,
+      liked: false,
+      bookmark: false,
+    },
+    {
+      id: 8,
+      name: 'Mì Italy',
+      description: '123 Calo, Cùng Shopee pipipi',
+      image: '/resource/pictures/8.jpg',
+      hearts: 0,
+      liked: false,
+      bookmark: false,
+    },
+    {
+      id: 9,
+      name: 'Bánh mì Chảo - Không bánh',
+      description: '111 Calo, Sale 91%',
+      image: '/resource/pictures/9.jpg',
+      hearts: 0,
+      liked: false,
+      bookmark: false,
+    }
+  ],
 }
 
 export default function dish(state = initialStae, action) {
