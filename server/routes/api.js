@@ -73,61 +73,100 @@ router.post('/dish' ,(req, res) => {
 })
 
 router.post('/explore' ,(req, res) => {
-  console.log(req.body)
-  const initialStae =  {
-    follow:  [
-      {
-        id: 10,
-        name: 'Bánh Mật Hoa Dâm Bụt',
-        description: '4151 Calo, Khó ăn dễ nấu',
-        image: '/resource/pictures/6.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
-      {
-        id: 7,
-        name: 'Chưa đặt tên',
-        description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
-        image: '/resource/pictures/7.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
-      {
-        id: 8,
-        name: 'Mì Italy',
-        description: '123 Calo, Cùng Shopee pipipi',
-        image: '/resource/pictures/8.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
-      {
-        id: 9,
-        name: 'Bánh mì Chảo - Không bánh',
-        description: '111 Calo, Sale 91%',
-        image: '/resource/pictures/9.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
+  // var show =  {
+  //   id: null,
+  //   name: null,
+  //   description:null,
+  //   image:null,
+  //   hearts: null,
+  // }
+  if ((req.body.value) == 0) {
+    db.query("select distinct r.recipe_id, r.recipe_name, r.recipe_image, r.recipe_des, r.recipe_like from recipes r left join follows on r.chef_id = follows.to_chef_id   where follows.from_chef_id = 1", (err, res1) => {
+      if (err) {
+        return next(err)
       }
-    ],
-    hot: [
-      
-    ],
-    new: [
-
-    ]
+      // convertSql(res1);
+      res.send(convertSql(res1))
+      // res.send(res1)
+    })
   }
-    
-  res.send(initialStae)
 })
+//   console.log(req.body)
+//   const initialStae =  {
+//     follow:  [
+//       {
+//         id: 10,
+//         name: 'Bánh Mật Hoa Dâm Bụt',
+//         description: '4151 Calo, Khó ăn dễ nấu',
+//         image: '/resource/pictures/6.jpg',
+//         hearts: 0,
+//         liked: false,
+//         bookmark: false,
+//       },
+//       {
+//         id: 7,
+//         name: 'Chưa đặt tên',
+//         description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
+//         image: '/resource/pictures/7.jpg',
+//         hearts: 0,
+//         liked: false,
+//         bookmark: false,
+//       },
+//       {
+//         id: 8,
+//         name: 'Mì Italy',
+//         description: '123 Calo, Cùng Shopee pipipi',
+//         image: '/resource/pictures/8.jpg',
+//         hearts: 0,
+//         liked: false,
+//         bookmark: false,
+//       },
+//       {
+//         id: 9,
+//         name: 'Bánh mì Chảo - Không bánh',
+//         description: '111 Calo, Sale 91%',
+//         image: '/resource/pictures/9.jpg',
+//         hearts: 0,
+//         liked: false,
+//         bookmark: false,
+//       }
+//     ],
+//     hot: [
+      
+//     ],
+//     new: [
+
+//     ]
+//   }
+    
+//   res.send(initialStae)
+// })
+
 
 router.post('/edit' ,(req, res) => {
   console.log(req.body)
     
   res.redirect('https://localhost:3000/chef/')
 })
-    
+   
 
+const convertSql = (rest ) =>{
+  
+  var res = {follows:[],
+            hot:[],
+            new:[]};
+           
+  rest.rows.map(element => {
+    var cov = {};
+    cov.id=element.recipe_id;
+    cov.name=element.recipe_name;
+    cov.desciption=element.recipe_des;
+    cov.image=element.recipe_image;
+    cov.hearts=element.recipe_like;
+    console.log(cov);
+    res.follows.push(cov);    
+  });
+  
+  // console.log([cov,res]);
+  return res;
+}
