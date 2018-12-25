@@ -151,7 +151,7 @@ class Chef extends Component {
           
           {value===0 &&<RecipesContainer recipes={recipes} actions={actions} user={user}/>}
           {value===1 &&<SnapsContainer snaps={snaps}/>}
-          {value===2 &&<RecipesContainer recipes={bookmarks} actions={actions}/>}
+          {value===2 &&<RecipesContainer recipes={bookmarks} actions={actions} user={user}/>}
 
           
         </div>

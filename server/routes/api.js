@@ -125,8 +125,20 @@ router.post('/explore' ,(req, res) => {
 
     ]
   }
-    
+
+  new Promise(() => {
+    console.log(req.body)
+    return req.body
+  }).then((res) => {
+    var a
+    a = req.body.id
+    return {
+      a
+    }
+  })
+
   res.send(initialStae)
+    
 })
 
 router.post('/edit' ,(req, res) => {

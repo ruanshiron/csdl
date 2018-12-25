@@ -290,7 +290,7 @@ class Dish extends Component {
               </Tabs>
               <Divider/>
               
-              {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip}/>}
+              {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip} />}
               {value === 1 && <SnapsContainer  snaps={snaps} OnUploadImage={this.handleOnUploadImage}/>}
               {value === 2 && <CommentsContainer onKeyPress={this.handleCommentKeyPress} user={user} comments={comments}/>}
               

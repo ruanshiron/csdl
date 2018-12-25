@@ -13,14 +13,15 @@ const styles = theme => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    height: "100%"
   },
   cardActionArea: {
     objectFit: 'cover',
-    flex: 1
+    flex: 1,
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
-    marginTop : 0,
+    minHeight: 141, 
+    height: '100%',// 16:9
   },
   cardContent: {
     flex: 1,

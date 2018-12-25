@@ -26,8 +26,6 @@ class Edit extends Component {
 
 
   handleToggleStepPhoto = (step, snap) => {
-    var a = this.state.steps
-    a[step].snaps[snap] = ""
     
   }
 
