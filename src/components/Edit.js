@@ -8,268 +8,138 @@ import PhotoCameraIcon from '@material-ui/icons/PhotoCamera'
 import SendIcon from '@material-ui/icons/Send'
 import IconButton from '@material-ui/core/IconButton' 
 import CancelIcon from '@material-ui/icons/Cancel'
-
-const styles = theme => ({
-  appBar: {
-    position: 'relative',
-  },
-  chip: {
-    margin: theme.spacing.unit,
-  },
-  icon: {
-    marginRight: theme.spacing.unit * 2,
-  },
-  media: {
-    height: 'auto',
-    paddingTop: '56.25%', // 16:9
-  },
-  heroUnit: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  heroContent: {
-    maxWidth: 600,
-    margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-  },
-  heroButtons: {
-    marginTop: theme.spacing.unit * 4,
-  },
-  layout: {
-    width: 'auto',
-    marginTop: theme.spacing.unit * 3,
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
-      width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`,
-  },
-  card: {
-    width: '100%',
-  },
-  actions: {
-    display: 'flex',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      marginRight: -8,
-    },
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6,
-  },
-  avatar: {
-    margin: 0,
-  },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  extendedIcon: {
-    marginRight: theme.spacing.unit,
-  },
-  root: {
-    flexGrow: 1,
-  },
-  badge: {
-    top: 20,
-    right: 1,
-  },
-  textField: {
-    marginLeft: 0,
-    marginRight: theme.spacing.unit,
-  },
-  dense: {
-    marginTop: 16,
-  },
-  resize:{
-    fontSize: 24
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
-    [theme.breakpoints.up('sm')] : {
-      bottom: theme.spacing.unit * 2,
-      right: theme.spacing.unit * 4,
-    },
-    [theme.breakpoints.up('md')] : {
-      bottom: theme.spacing.unit * 2,
-      right: theme.spacing.unit * 18,
-    }
-  },
-});
-
+import styles from '../assets/editStyles'
 
 class Edit extends Component {
   state = {
-    name: "",
-    description: "",
-    ingredients: [
-      "",
-    ],
-    steps: [
-      {
-        text: "",
-        snaps: [
-          "http://hinhnendepnhat.net/wp-content/uploads/2017/11/Hinh-anh-dep-girl-xinh-de-thuong-nhat-nam-mau-tuat-2018.jpg",
-          "http://sohanews.sohacdn.com/thumb_w/660/2017/photo1486969199024-1486969199175-0-32-308-529-crop-1486969281069.jpg",
-          ""
-        ],
-      }
-    ]
+    isSubmitted : false,
   }
 
-  componentWillMount() {
-    console.log(this.props.match)
+
+  componentDidMount() {
+
   }
 
-  handleTitleOnChange = (e) => {
-    this.setState({
-      name: e.target.value
+  componentWillUnmount() {
+
+  }
+
+
+  handleToggleStepPhoto = (step, snap) => {
+    
+  }
+
+  isCorrect(data) {
+    var r = true
+    if (data.name.trim() === "") return false
+    if (data.description.trim() === "") return false
+    // if (data.image === "") return false
+    data.ingredients.map((text) => {
+      if (text.trim() === "") r = false
+      return false
     })
-    // this.state.title = e.target.value
+    data.steps.map((step) => {
+      if (step.text.trim() === "") r = false
+      return false
+    })
+    return r
+  }
+
+  handleOnSubmit = (edit) => {
+    if (!this.isCorrect(edit)) {
+      console.log(false)
+    } else console.log(true)
   } 
 
-  handleDescriptionOnChange = (e) => {
-    this.setState({
-      description: e.target.value
-    })
-    // this.state.description = e.target.value
-  }
+  
 
-  handleIngredientKeyPress = (event, index) => {
-    const {key} = event
-    if (key === 'Enter') {
-      this.state.ingredients.push("")
-      this.setState({
-        ingredients: [
-          ...this.state.ingredients,
-        ]
-      })
-      event.preventDefault()
-    }
-    
-    console.log(this.state.ingredients)
-  }
+  handleOnKeyPress = (type, event, data) => {
+    if (event.key !== 'Enter') 
+      return
 
-  handleIngredientOnChange = (event, index) => {
-    var a = this.state.ingredients
-    a[index] = event.target.value 
-
-    this.setState({
-      ingredients: a
-    })
-    
-    console.log(this.state.ingredients)
-    
-  }
-
-
-  handleDeleteIngredient = (event, index) => {
-    var a = [...this.state.ingredients]
-    
-    if (a.length === 1) {
-      a[index] = ""
-      // this.state.ingredients = a
-      this.setState({
-        ingredients: a
-      })
-      document.getElementById("ingredients" + index.toString()).value = this.state.ingredients[index]
-    } else {
-      a.splice(index, 1)
-      // this.state.ingredients = a
-      this.setState({
-        ingredients: a,
-      })
-    }
-    
-    this.state.ingredients.map((value, i) => (
-      document.getElementById("ingredients" + i.toString()).value = this.state.ingredients[i]
-    ))
-
-    console.log(this.state.ingredients)
-  }
-
-  handleStepKeyPress = (event, index) => {
-    const {key} = event
-    if (key === 'Enter') {
-      this.state.steps.push(
-        {
+    switch (type) {
+      case 'ingredients':
+        data[type].push('')
+        break
+      case 'steps':
+        data[type].push({
           text: "",
           snaps: [
             "",
             "",
             ""
-          ],
-        }
-      )
-      this.setState({
-        steps: [
-          ...this.state.steps,
-        ]
-      })
-      event.preventDefault()
+          ]
+        })
+        break
+      default:
+        break
     }
+    event.preventDefault()
 
-  }
-
-  handleStepOnChange = (event, index) => {
-    var a = this.state.steps
-    a[index].text = event.target.value
-    // this.state.steps[index].text = event.target.value
-    this.setState({
-      steps: a
+    this.forceUpdate(() => {
+      
     })
   }
 
-  handleDeleteStep = (event, index) => {
-    var a = [...this.state.steps]
-    
-    if (a.length === 1) {
-      a[index].text = ""
-      // this.state.steps = a
-      this.setState({
-        steps: a
-      })
-      document.getElementById("steps" + index.toString()).value = this.state.steps[index].text
-    } else {
-      a.splice(index, 1)
-      // this.state.steps = a
-      this.setState({
-        steps: a,
-      })
+  handleOnChange = (type, event, data, index) => {
+    switch (type) {
+      case 'name':
+        data[type] = event.target.value
+        break
+      case 'description':
+        data[type] = event.target.value
+        break
+      case 'ingredients':
+        data[type][index] = event.target.value
+        break
+      case 'steps':
+        data[type][index].text = event.target.value
+        break
+      default:
+        break
     }
-    
-    this.state.steps.map((value, i) => (
-      document.getElementById("steps" + i.toString()).value = this.state.steps[i].text
-    ))
 
-    console.log(this.state.steps)
+    console.log(this.props.edit)
   }
 
-  handleOnSubmit = () => {
-    const submitForm = {
-      ...this.state,
-      userID: this.props.user.userID
-    }
-  } 
 
+  handleOnDelete = (type, data, index) => {
+    switch (type) {
+      case 'name':
+        return
+      case 'description':
+        return
+      case 'ingredients':
+        if (data[type].length === 1) {
+          data[type] = [""]
+        } else {
+          data[type].splice(index,1)
+        }
+        this.forceUpdate()
+        data[type].map((d, i) => (
+          document.getElementById(type + i.toString()).value = d
+        ))
+        break
+      case 'steps':
+        if (data[type].length === 1) {
+          data[type][index].text = ""
+        } else {
+          data[type].splice(index,1)
+        }
+        this.forceUpdate()
+        data[type].map((d, i) => (
+          document.getElementById(type + i.toString()).value = d.text
+        ))
+        break
+      default:
+        break
+    }
+
+  }
+ 
   render() {
     const { classes} = this.props
-    var { ingredients, steps } = this.state
+    var { edit } = this.props
 
     return (
       <main>
@@ -315,7 +185,7 @@ class Edit extends Component {
                   margin="dense"
                   variant="outlined"
                   fullWidth
-                  onChange={(e) => this.handleTitleOnChange(e)} 
+                  onChange={(e) => this.handleOnChange('name', e, edit, null)} 
                 />
                 <TextField
                   id="description"
@@ -324,7 +194,7 @@ class Edit extends Component {
                   margin="dense"
                   variant="outlined"
                   fullWidth
-                  onChange={(e) => this.handleDescriptionOnChange(e)} 
+                  onChange={(e) => this.handleOnChange('description', e, edit, null)} 
                 />
               </CardContent>
               <CardContent>
@@ -332,7 +202,7 @@ class Edit extends Component {
                   Nguyên Liệu
                 </Typography>
                 {
-                  ingredients.map( (text, index) => (
+                  edit.ingredients.map( (text, index) => (
                     <TextField
                       id={"ingredients" + index.toString()}
                       key={index}
@@ -346,15 +216,15 @@ class Edit extends Component {
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
-                              onClick={(e) => this.handleDeleteIngredient(e, index)}
+                              onClick={(e) => this.handleOnDelete('ingredients', edit, index)}
                             >
                               <CancelIcon/>
                             </IconButton>
                           </InputAdornment>
                         ),
                       }}
-                      onKeyPress={(e) => this.handleIngredientKeyPress(e, index)}
-                      onChange={(e) => this.handleIngredientOnChange(e, index)}
+                      onKeyPress={(e) => this.handleOnKeyPress('ingredients', e, edit)}
+                      onChange={(e) => this.handleOnChange('ingredients', e, edit, index)}
                       autoFocus={index===0? false: true}
                     />
                   ))
@@ -366,38 +236,42 @@ class Edit extends Component {
                   Các bước
                 </Typography>
                 {
-                  steps.map((step,index) => (
+                  edit.steps.map((step,index) => (
                     <Fragment key={index}>
                     <TextField
                       id={'steps' + index.toString()}
                       label={ "Bước " + (index+1).toString()}
                       helperText="Nhấn Enter để thêm bước mới, nhấn lại để thêm/thay hình"
                       className={classNames(classes.textField, classes.dense)}
-                      margin="dense"
+                      margin="normal"
                       variant="outlined"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      placeholder="Nội dung..."
                       fullWidth
                       multiline
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
-                              onClick={(e) => this.handleDeleteStep(e, index)}
+                              onClick={(e) => this.handleOnDelete('steps', edit, index)}
                             >
                               <CancelIcon/>
                             </IconButton>
                           </InputAdornment>
                         ),
                       }}
-                      onKeyPress={(e) => this.handleStepKeyPress(e, index)}
-                      onChange={(e) => this.handleStepOnChange(e, index)}
+                      onKeyPress={(e) => this.handleOnKeyPress('steps', e, edit)}
+                      onChange={(e) => this.handleOnChange('steps', e, edit, index)}
                       autoFocus={index===0? false: true}
                     />
                     <Grid container spacing={8}>
                     {
-                      step.snaps.map((snap, index) => (
-                        <Grid key={index} item xs={12} sm={4} md={4} lg={4}>
+                      step.snaps.map((snap, i) => (
+                        <Grid key={i} item xs={12} sm={4} md={4} lg={4}>
                           <Card style={{marginBottom: 10, height: 181}} square elevation={0}>
-                            <CardActionArea>
+                            <CardActionArea onClick={() => this.handleToggleStepPhoto(index, i)}>
                               {
                               snap!=="" ? 
                                 <CardMedia image={snap} style={{paddingTop: '100%', marginTop : 0}} /> 
@@ -421,7 +295,7 @@ class Edit extends Component {
                 
               </CardContent>
 
-              <Button onClick={this.handleOnSubmit} variant='fab' color='primary' className={classes.fab}>
+              <Button onClick={() => this.handleOnSubmit(edit)} variant='fab' color='primary' className={classes.fab}>
                 <SendIcon/>
               </Button>
 

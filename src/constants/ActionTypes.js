@@ -8,6 +8,7 @@ export const COMMENT = 'COMMENT'
 export const SNAP = 'SNAP'
 
 export const POST = 'POST'
+export const IMAGE = 'IMAGE'
 
 export const FOLLOW = 'FOLLOW'
 

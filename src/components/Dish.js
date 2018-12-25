@@ -12,104 +12,13 @@ import BookmarkIcon from '@material-ui/icons/Bookmark'
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder'
 import EditIcon from '@material-ui/icons/Edit'
 import NotificationsIcon from '@material-ui/icons/Notifications'
-
-const styles = theme => ({
-  appBar: {
-    position: 'relative',
-  },
-  chip: {
-    margin: theme.spacing.unit,
-  },
-  icon: {
-    marginRight: theme.spacing.unit * 2,
-  },
-  media: {
-    height: 'auto',
-    paddingTop: '56.25%', // 16:9
-  },
-  heroUnit: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  heroContent: {
-    maxWidth: 600,
-    margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-  },
-  heroButtons: {
-    marginTop: theme.spacing.unit * 4,
-  },
-  layout: {
-    width: 'auto',
-    marginTop: theme.spacing.unit * 3,
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
-      width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`,
-  },
-  card: {
-    width: '100%',
-  },
-  actions: {
-    display: 'flex',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      marginRight: -8,
-    },
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6,
-  },
-  avatar: {
-    margin: 0,
-  },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  extendedIcon: {
-    marginRight: theme.spacing.unit,
-  },
-  root: {
-    flexGrow: 1,
-  },
-  badge: {
-    top: 20,
-    right: 1,
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
-    [theme.breakpoints.up('sm')] : {
-      bottom: theme.spacing.unit * 2,
-      right: theme.spacing.unit * 4,
-    },
-    [theme.breakpoints.up('md')] : {
-      bottom: theme.spacing.unit * 2,
-      right: theme.spacing.unit * 18,
-    }
-  },
-});
+import styles from '../assets/dishStyles'
 
 
 
 function RecipeContainer(props) {
   const { recipe } = props
+  
   return (
     <>
     <CardContent>
@@ -165,7 +74,7 @@ RecipeContainer.Proptypes = {
 }
 
 function SnapsContainer(props) {
-  const {snaps} = props
+  const {snaps, OnUploadImage} = props
   return (
     <>
     <Grid container >
@@ -182,7 +91,7 @@ function SnapsContainer(props) {
       }
     </Grid>
     <Grid container justify='center' alignContent='center'>
-      <input accept="image/*" style={{display:'none'}} id="icon-button-file" type="file" />
+      <input onChange={OnUploadImage} accept="image/*" style={{display:'none'}} id="icon-button-file" type="file" encType="multipart/form-data"/>
         <label htmlFor="icon-button-file">
           <Button component="span" variant="extendedFab" style={{marginTop:'30%', marginBottom:'40%'}}>Thêm ảnh của bạn</Button>
         </label>
@@ -259,7 +168,7 @@ CommentsContainer.Proptypes = {
 
 class Dish extends Component {
   state = {
-    value: 0,
+    value: 1,
   }
 
   componentWillMount() {
@@ -293,6 +202,15 @@ class Dish extends Component {
 
   handleAvatarClick = (id) => {
     this.props.history.push('/chef/' + id)
+  }
+
+  handleOnUploadImage = (e) => {
+    const image = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', image)
+    formData.append('id', 312312)
+
+    this.props.actions.fetchUploadImage(formData)
   }
 
   render() {
@@ -372,8 +290,8 @@ class Dish extends Component {
               </Tabs>
               <Divider/>
               
-              {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip}/>}
-              {value === 1 && <SnapsContainer  snaps={snaps}/>}
+              {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip} />}
+              {value === 1 && <SnapsContainer  snaps={snaps} OnUploadImage={this.handleOnUploadImage}/>}
               {value === 2 && <CommentsContainer onKeyPress={this.handleCommentKeyPress} user={user} comments={comments}/>}
               
             </Card>
