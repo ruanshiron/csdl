@@ -4,27 +4,7 @@ import { Grid, Button} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Proptypes from 'prop-types'
 import ExploreItem from './RecipeItem';
-
-const styles = theme => ({
-  layout: {
-    marginTop: 50,
-    width: 'auto',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(960 + theme.spacing.unit * 3 * 2)]: {
-      width: 960,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`,
-  },  
-  button: {
-    margin: theme.spacing.unit,
-    marginBottom: theme.spacing.unit*2,
-  },
-});
+import styles from '../assets/exploreStyles'
 
 class Explore extends Component {
   state = {
@@ -35,19 +15,27 @@ class Explore extends Component {
     this.props.actions.fetchExplore({userID: this.props.user.userID, value})
   }
 
-  handleChangeValue(index) {
-    if (index === this.state.value) {
-      //TODO renew reducer
+  componentDidMount() {
+    if (this.props.explore.didMount === false) {
+      this.props.actions.fetchExplore({userID: this.props.user.ID, value: 0})
+      this.props.actions.fetchExplore({userID: this.props.user.ID, value: 1})
+      this.props.actions.fetchExplore({userID: this.props.user.ID, value: 2})
+    }
+    this.props.explore.didMount = true
+  }
 
+  handleChangeValue(value) {
+    if (value === this.state.value) {
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value})
     }
 
     this.setState ({
-      value: index
+      value: value
     })
   }
 
   render() {
-    const { classes, explore, actions } = this.props
+    const { classes, explore, actions, user } = this.props
     const { value } = this.state
     const tabs = ["Theo dõi", "HOT", "Mới"]
 
@@ -73,21 +61,21 @@ class Explore extends Component {
             { value === 0 &&
               explore.follow.map((recipe, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4} lg={4}>
-                  <ExploreItem dish={recipe} actions={actions}></ExploreItem>
+                  <ExploreItem dish={recipe} actions={actions} user={user}></ExploreItem>
                 </Grid>
               ))
             }
             { value === 1 &&
               explore.hot.map((recipe, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4} lg={4}>
-                  <ExploreItem dish={recipe} actions={actions}></ExploreItem>
+                  <ExploreItem dish={recipe} actions={actions} user={user}></ExploreItem>
                 </Grid>
               ))
             }
             { value === 2 &&
               explore.new.map((recipe, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4} lg={4}>
-                  <ExploreItem dish={recipe} actions={actions}></ExploreItem>
+                  <ExploreItem dish={recipe} actions={actions} user={user}></ExploreItem>
                 </Grid>
               ))
             }
@@ -110,7 +98,6 @@ class Explore extends Component {
 
 Explore.Proptypes = {
   classes: Proptypes.object.isRequired,
-  explore: Proptypes.array.isRequired
 }
 
 export default withStyles(styles)(Explore)

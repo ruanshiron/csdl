@@ -4,66 +4,23 @@ import {
   BOOKMARK
 } from '../constants/ActionTypes'
 
+// {
+//   id: 6,
+//   name: 'Bánh Mật Hoa Dâm Bụt',
+//   description: '4151 Calo, Khó ăn dễ nấu',
+//   image: '/resource/pictures/6.jpg',
+//   hearts: 0,
+//   liked: false,
+//   bookmark: false,
+// },
+
 const initialState = {
+  didMount: false,
   follow:  [
-    {
-      id: 6,
-      name: 'Bánh Mật Hoa Dâm Bụt',
-      description: '4151 Calo, Khó ăn dễ nấu',
-      image: '/resource/pictures/6.jpg',
-      hearts: 0,
-      liked: false,
-      bookmark: false,
-    },
-    {
-      id: 7,
-      name: 'Chưa đặt tên',
-      description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
-      image: '/resource/pictures/7.jpg',
-      hearts: 0,
-      liked: false,
-      bookmark: false,
-    },
-    {
-      id: 8,
-      name: 'Mì Italy',
-      description: '123 Calo, Cùng Shopee pipipi',
-      image: '/resource/pictures/8.jpg',
-      hearts: 0,
-      liked: false,
-      bookmark: false,
-    },
-    {
-      id: 9,
-      name: 'Bánh mì Chảo - Không bánh',
-      description: '111 Calo, Sale 91%',
-      image: '/resource/pictures/9.jpg',
-      hearts: 0,
-      liked: false,
-      bookmark: false,
-    }
   ],
   hot: [
-    {
-      id: 9,
-      name: 'Bánh mì Chảo - Không bánh',
-      description: '111 Calo, Sale 91%',
-      image: '/resource/pictures/9.jpg',
-      hearts: 0,
-      liked: false,
-      bookmark: false,
-    }
   ],
   new: [
-    {
-      id: 9,
-      name: 'Bánh mì Chảo - Không bánh',
-      description: '111 Calo, Sale 91%',
-      image: '/resource/pictures/9.jpg',
-      hearts: 0,
-      liked: false,
-      bookmark: false,
-    }
   ]
 }
 
@@ -74,6 +31,7 @@ export default function explore(state = initialState, action) {
   switch (action.type) {
     case LIKE:
       return {
+        ...state,
         follow: state.follow.map(recipe => (
           recipe.id === action.id ?
           {
@@ -101,6 +59,7 @@ export default function explore(state = initialState, action) {
       }
     case BOOKMARK:
       return {
+        ...state,
         follow: state.follow.map(recipe => (
           recipe.id === action.id ?
           {
@@ -125,6 +84,7 @@ export default function explore(state = initialState, action) {
       }
     case EXPLORE:
       return {
+        ...state,
         follow: concatAndDeDuplicateObjectsDeep('id', state.follow, action.payload.follow),
         hot: concatAndDeDuplicateObjectsDeep('id', state.hot, action.payload.hot),
         new: concatAndDeDuplicateObjectsDeep('id', state.new, action.payload.new)

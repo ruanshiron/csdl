@@ -13,10 +13,7 @@ import Edit from '../containers/Edit'
 
 class App extends Component {
 
-  
-
   render() {
-
     return (
       <Fragment>
         <Router>

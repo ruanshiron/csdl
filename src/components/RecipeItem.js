@@ -38,7 +38,7 @@ class ExploreItem extends Component {
   }
 
   render() {
-    const { dish, classes, actions } = this.props
+    const { dish, classes, actions, user } = this.props
     return (
       <Card className={classes.card}>
         <CardActionArea className={classes.cardActionArea} onClick={()=>this.handleRecipeClicked(dish.id)}>
@@ -58,14 +58,14 @@ class ExploreItem extends Component {
         </CardActionArea>
         <Divider/>
         <CardActions>
-          <IconButton size="small" onClick={() => actions.like(dish.id)}>
+          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.like(dish.id)}>
             <Badge badgeContent={dish.hearts} classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.liked ? <FavoriteIcon color="secondary"/> : <FavoriteBorderIcon/>
             }
             </Badge>
           </IconButton>
-          <IconButton size="small" onClick={() => actions.bookmark(dish.id)}>
+          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.bookmark(dish.id)}>
             <Badge badgeContent="Lưu" classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.bookmark ? <BookmarkIcon color="primary"/> : <BookmarkBorderIcon/>

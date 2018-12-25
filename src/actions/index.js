@@ -40,7 +40,7 @@ export const edit = (data) => ({
 
 export const fetchExplore = (data) => {
   return (dispatch) => {
-    return axios.post(API + 'explore', {data})
+    return axios.post(API + 'explore', data)
       .then((response) => {
         dispatch(explore(response.data))
       })
@@ -64,7 +64,7 @@ export const fetchDish = (data) => {
 
 export const fetchChef = (data) => {
   return (dispath) => {
-    return axios.post(API + 'dish', {data})
+    return axios.post(API + 'chef', {data})
       .then(response => {
         dispath(chef(response.data))
       })
@@ -74,9 +74,21 @@ export const fetchChef = (data) => {
   }
 }
 
+export const fetchEdit = (data) => {
+  return (dispath) => {
+    return axios.post(API + 'edit', {data})
+      .then(response => {
+        dispath(edit(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
 export const fetchLike = (data) => {
   return (dispath) => {
-    return axios.post(API + 'dish', {data})
+    return axios.post(API + 'like', {data})
       .then(response => {
         dispath(like(response.data))
       })
@@ -125,7 +137,7 @@ export const fetchComment = (data) => {
 
 export const fetchPost = (data) => {
   return (dispath) => {
-    return axios.post(API + 'comment', {data})
+    return axios.post(API + 'post', {data})
       .then(response => {
         dispath(comment(response.data))
       })
@@ -134,3 +146,16 @@ export const fetchPost = (data) => {
       })
   }
 }
+
+export const fetchUploadImage = (data) => {
+  return (dispath) => {
+    return axios.post(API + 'image', data)
+      .then(response => {
+        dispath(comment(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+

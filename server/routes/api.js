@@ -1,6 +1,18 @@
 // api.js
 var express = require('express')
 var router = express.Router()
+var multer  = require('multer')
+
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './public')
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+ 
+var upload = multer({storage: storage})
 
 const db = require('../db')
 
@@ -8,9 +20,10 @@ module.exports = router
 
 // TODO 
 
-router.get('/', (req, res) => {
-  console.log('noop')
-  res.send('noop')
+router.post('/', (req, res) => {
+  db.query("SELECT NOW()", [], (req, result) => {
+    res.send(result)
+  })
 })
 
 router.post('/dish' ,(req, res) => {
@@ -74,17 +87,9 @@ router.post('/dish' ,(req, res) => {
 
 router.post('/explore' ,(req, res) => {
   console.log(req.body)
+
   const initialStae =  {
     follow:  [
-      {
-        id: 10,
-        name: 'Bánh Mật Hoa Dâm Bụt',
-        description: '4151 Calo, Khó ăn dễ nấu',
-        image: '/resource/pictures/6.jpg',
-        hearts: 0,
-        liked: false,
-        bookmark: false,
-      },
       {
         id: 7,
         name: 'Chưa đặt tên',
@@ -129,5 +134,9 @@ router.post('/edit' ,(req, res) => {
     
   res.redirect('https://localhost:3000/chef/')
 })
-    
 
+router.post('/image', upload.array('image', 3), (req, res) => {
+  console.log(req.body.id)
+
+  res.send('dsds')
+})
