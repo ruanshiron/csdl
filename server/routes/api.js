@@ -26,7 +26,188 @@ router.post('/', (req, res) => {
   })
 })
 
+router.post('/dish/recipe', (req, response) => {
+  const qRecipe = `select r.recipe_id, r.recipe_name, r.recipe_des, r.recipe_image, r.recipe_created
+                    from recipes r
+                    where r.recipe_id = $1`;
+  const params = [req.body.id.toString()]
+  console.log(req.body.id)
+  db.query(qRecipe, params, (err, res) => {
+    if (err) return next(err)
+    response.json({
+      id: res.rows[0].recipe_id,
+      name:  res.rows[0].recipe_name,
+      description: res.rows[0].recipe_des,
+      picture: res.rows[0].recipe_image,
+      created_at: res.rows[0].recipe_created
+    })
+  })
+})
+
+router.post('/dish/ingredients', (req, response) => {
+  const qIngredients = `select i.ingredient_name from ingredients i
+                        join made_from m on i.ingredient_id = m.ingredient_id
+                        where m.recipe_id = $1`;
+  const params = [req.body.id.toString()] 
+
+  db.query(qIngredients, params, (err, res) => {
+    if (err) return next(err)
+    response.json(
+      res.rows.map((row) => {
+        return row['ingredient_name']
+      })
+    )
+  })
+})
+
+router.post('/dish/steps', (req, response) => {
+  const qSteps = `select s.index, s.text, i.image_src
+                  from steps s
+                  left join images i on i.index = s.index and i.recipe_id = s.recipe_id
+                  where s.recipe_id = $1 `;
+  const params = [req.body.id.toString()] 
+
+  db.query(qSteps, params, (err, res) => {
+    if (err) return next(err)
+    response.json(
+      stepsParser(res.rows)
+    )
+  })
+})
+
+const stepsParser = (data) => {
+  var res = {}
+  data.map(item=>{
+    if (res[item.index] === undefined) 
+      res[item.index] = {text: item.text, images: [item.image_src]}
+    else
+      res[item.index].images.push(item.image_src)
+  })
+  return res
+}
+
+router.post('/dish/chef', (req, response) => {
+  const qChef = `select c.chef_id, c.chef_name, c.chef_pic, 
+                  exists (
+                    select * from follows f
+                    where f.from_chef_id = $2 and f.to_chef_id = c.chef_id) followed
+                from chefs c, recipes
+                where c.chef_id = recipes.chef_id and 
+                  recipes.recipe_id = $1 `;
+  console.log(req.body.id + req.body.userID)
+  const params = [req.body.id, req.body.userID] 
+
+  db.query(qChef, params, (err, res) => {
+    if (err) return console.log(err)
+    response.json({
+      id: res.rows[0].chef_id,
+      name: res.rows[0].chef_name,
+      picture: res.rows[0].chef_pic,
+      followed: res.rows[0].followed,
+    })
+  })
+})
+
+router.post('/dish/snaps', (req, response) => {
+  const qSnaps = `select s.image_src from snaps s
+  where s.recipe_id = $1`;
+
+  const params = [req.body.id] 
+
+  db.query(qSnaps, params, (err, res) => {
+    if (err) return console.log(err)
+    console.log(res)
+    response.json(
+      res.rows
+    )
+  })
+})
+
+router.post('/dish/comments', (req, response) => {
+  const qComment = `select c.chef_id,chefs.chef_pic,c.comment_text,c.comment_created_at 
+                      from comments c, chefs
+                      where c.recipe_id = $1 and c.chef_id = chefs.chef_id`;
+
+  const params = [req.body.id] 
+
+  db.query(qComment, params, (err, res) => {
+    if (err) return console.log(err)
+    response.json(
+      res.rows.map((item)=> {
+        return {
+          chef: {
+            id: item.chef_id,
+            picture: item.chef_pic,
+          },
+          text: item.comment_text,
+          created_at: item.comment_created_at,
+        }
+      })
+    )
+  })
+})
+
 router.post('/dish' ,(req, res) => {
+  const qRecipe = `select r.recipe_id, r.recipe_name, r.recipe_des, r.recipe_image, r.recipe_created
+                    from recipes r
+                    where r.recipe_id = 1`;
+  const qIngredient= `select i.ingredient_name from ingredients i   
+                        join made_from m on i.ingredient_id = m.ingredient_id
+                        where m.recipe_id = 1`;
+  const qStep = `select s.index,s.text,i.image_src  from steps s
+                  left join images i on i.index = s.index and i.recipe_id = s.recipe_id
+                  where s.recipe_id = 1`;
+  const qChef = `select c.chef_id, c.chef_name, c.chef_pic, 
+                    exists (
+                      select * from follows f
+                      where f.from_chef_id = 3 and f.to_chef_id = c.chef_id) followed
+                  from chefs c, recipes
+                  where c.chef_id = recipes.chef_id and 
+                    recipes.recipe_id =1 `;
+  const qSnap = `select s.image_src from snaps s
+                  where s.recipe_id = 3`;
+  const qComment = `select c.chef_id,chefs.chef_pic,c.comment_text,c.comment_created_at 
+                      from comments c, chefs
+                      where c.recipe_id = 2 and c.chef_id = chefs.chef_id`;
+  db.query(qRecipe,(err,res0) => {
+      var result = {}
+
+      if (err) {
+        return next(err)
+      }
+
+      result[id] = 
+      db.query(qIngredient,(err,res1) => {
+        if (err) {
+          return next(err)
+        }
+        db.query(qStep,(err,res2) => {
+          if (err) {
+            return next(err)
+          }
+          db.query(qChef,(err,res3) => {
+            if (err) {
+              return next(err)
+            }
+            db.query(qSnap,(err,res4) => {
+              if (err) {
+                return next(err)
+              }
+              db.query(qComment,(err,res4) => {
+                if (err) {
+                  return next(err)
+                }
+                console.log(res0)
+                res.send(res0)
+              })
+            })
+          })
+        })
+      })
+    })
+  
+  
+  
   const initialStae = {
     recipe: {
       id: null,
@@ -82,80 +263,94 @@ router.post('/dish' ,(req, res) => {
     ]
   }
     
-  res.send(initialStae)
+
 })
 
 router.post('/explore' ,(req, res) => {
-  // var show =  {
-  //   id: null,
-  //   name: null,
-  //   description:null,
-  //   image:null,
-  //   hearts: null,
-  // }
+  const x=`select r.recipe_id, r.recipe_name, r.recipe_image,r.recipe_des, r.recipe_like, COALESCE(l.likeds, false) liked, COALESCE(b.actives, false) active from recipes r
+          join follows f on r.chef_id = f.to_chef_id
+          left join (
+            select *, (case 
+                  when chef_id not in(1) 
+                  then false 
+                  else true
+                end) likeds from likes 
+            where chef_id =1
+            ) l on l.recipe_id = r.recipe_id
+          left join (
+            select *, (case 
+                  when chef_id not in(1) 
+                  then false 
+                  else true
+                end) actives from bookmarks
+            where chef_id =1
+            ) b on b.recipe_id = r.recipe_id
+          where f.from_chef_id = 1`;
+const y = `select r.recipe_id, r.recipe_name, r.recipe_image,r.recipe_des, r.recipe_like,COALESCE(l.likeds, false) liked, COALESCE(b.actives, false) active 
+            from recipes r
+            left join (
+              select *, (case 
+                    when chef_id not in(1) 
+                    then false 
+                    else true
+                  end) likeds from likes 
+              where chef_id =1
+              ) l on l.recipe_id = r.recipe_id
+            left join (
+              select *, (case 
+                    when chef_id not in(1) 
+                    then false 
+                    else true
+                  end) actives from bookmarks
+              where chef_id =1
+              ) b on b.recipe_id = r.recipe_id
+            order by r.recipe_like DESC
+            limit 3`;
+const z = `select r.recipe_id, r.recipe_name, r.recipe_image,r.recipe_des, r.recipe_like,COALESCE(l.likeds, false) liked, COALESCE(b.actives, false) active 
+            from recipes r
+            left join (
+              select *, (case 
+                    when chef_id not in(1) 
+                    then false 
+                    else true
+                  end) likeds from likes 
+              where chef_id =1
+              ) l on l.recipe_id = r.recipe_id
+            left join (
+              select *, (case 
+                    when chef_id not in(1) 
+                    then false 
+                    else true
+                  end) actives from bookmarks
+              where chef_id =1
+              ) b on b.recipe_id = r.recipe_id
+            order by r.recipe_created DESC
+            limit 3`;
   if ((req.body.value) == 0) {
-    db.query("select distinct r.recipe_id, r.recipe_name, r.recipe_image, r.recipe_des, r.recipe_like from recipes r left join follows on r.chef_id = follows.to_chef_id   where follows.from_chef_id = 1", (err, res1) => {
+    db.query(x, (err, res0) => {
       if (err) {
         return next(err)
       }
-      // convertSql(res1);
-      res.send(convertSql(res1))
-      // res.send(res1)
+      res.send(convertExplore(res0,0))
+    })
+  }
+  if ((req.body.value) == 1) {
+    db.query(y, (err, res1) => {
+      if (err) {
+        return next(err)
+      }
+      res.send(convertExplore(res1,1))
+    })
+  }
+  if ((req.body.value) == 2) {
+    db.query(z, (err, res2) => {
+      if (err) {
+        return next(err)
+      }
+      res.send(convertExplore(res2,2))
     })
   }
 })
-//   console.log(req.body)
-//   const initialStae =  {
-//     follow:  [
-//       {
-//         id: 10,
-//         name: 'Bánh Mật Hoa Dâm Bụt',
-//         description: '4151 Calo, Khó ăn dễ nấu',
-//         image: '/resource/pictures/6.jpg',
-//         hearts: 0,
-//         liked: false,
-//         bookmark: false,
-//       },
-//       {
-//         id: 7,
-//         name: 'Chưa đặt tên',
-//         description: '2656 Calo, Dễ nấu - Dễ ăn - Dễ Tiêu - Dễ Thải',
-//         image: '/resource/pictures/7.jpg',
-//         hearts: 0,
-//         liked: false,
-//         bookmark: false,
-//       },
-//       {
-//         id: 8,
-//         name: 'Mì Italy',
-//         description: '123 Calo, Cùng Shopee pipipi',
-//         image: '/resource/pictures/8.jpg',
-//         hearts: 0,
-//         liked: false,
-//         bookmark: false,
-//       },
-//       {
-//         id: 9,
-//         name: 'Bánh mì Chảo - Không bánh',
-//         description: '111 Calo, Sale 91%',
-//         image: '/resource/pictures/9.jpg',
-//         hearts: 0,
-//         liked: false,
-//         bookmark: false,
-//       }
-//     ],
-//     hot: [
-      
-//     ],
-//     new: [
-
-//     ]
-//   }
-    
-//   res.send(initialStae)
-// })
-
-
 router.post('/edit' ,(req, res) => {
   console.log(req.body)
     
@@ -163,9 +358,8 @@ router.post('/edit' ,(req, res) => {
 })
    
 
-const convertSql = (rest ) =>{
-  
-  var res = {follows:[],
+const convertExplore = (rest,value ) =>{
+  var res = {follow:[],
             hot:[],
             new:[]};
            
@@ -173,19 +367,42 @@ const convertSql = (rest ) =>{
     var cov = {};
     cov.id=element.recipe_id;
     cov.name=element.recipe_name;
-    cov.desciption=element.recipe_des;
+    cov.description=element.recipe_des;
     cov.image=element.recipe_image;
     cov.hearts=element.recipe_like;
+    cov.liked=element.liked;
+    cov.bookmark=element.active;
     console.log(cov);
-    res.follows.push(cov);    
+    value===0 && res.follow.push(cov);   
+    value===1 && res.hot.push(cov); 
+    value===2 && res.new.push(cov);
   });
-  
-  // console.log([cov,res]);
   return res;
 }
+
+
 
 router.post('/image', upload.array('image', 3), (req, res) => {
   console.log(req.body.id)
 
   res.send('dsds')
+})
+
+router.post('/like', (req, response) => {
+  const qLike = `insert into likes (chef_id, recipe_id, liked, like_created_at) 
+                  select $2, $1, true, now()
+                  where not exists (select 1 from likes where chef_id = $2 and recipe_id = $1)`
+
+  const params = [req.body.id, req.body.userID] 
+
+  db.query(qLike, params, (err, res) => {
+    if (err) return console.log(err)
+    response.json(
+      res.rowCount == 0 ? {
+        id: null
+      } : {
+        id: req.body.id
+      }
+    )
+  })
 })

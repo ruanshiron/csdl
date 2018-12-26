@@ -2,94 +2,44 @@ import {
   LIKE,
   COMMENT,
   BOOKMARK,
-  DISH,
   FOLLOW,
+  DISH,
+  DISH_RECIPE,
+  DISH_INGREDIENTS,
+  DISH_STEPS,
+  DISH_CHEF,
+  DISH_SNAPS,
+  DISH_COMMENTS,
 } from '../constants/ActionTypes'
 
 const initialStae = {
   recipe: {
-    id: 1,
-    name:"Món non",
-    description: "cho mọi người, mọi gia đìn, mọi lứa tuổi",
-    picture: "https://cdn.pose.com.vn/assets/2018/09/nancy2.jpg",
+    id: null,
+    name:"",
+    description: "",
+    picture: "",
     ingredients: [
-      "Thịt nạc",
-      "Thịt mỡ",
-      "Xôi",
-      "Gạo lứt"
+
     ],
     steps: [
-      {
-        text: "đun sôi nước nóng aldkfk ldlk flak",
-        images: [
-          "https://pbs.twimg.com/profile_images/748953502970441728/5cVwlxPU_400x400.jpg",
-          "https://image.dhgate.com/0x0/f2/albu/g4/M00/46/8B/rBVaEFdXeY-AVdYyAAJ8WYBS9mE880.jpg",
 
-        ]
-      },
-      {
-        text: "Để nguội nước lã",
-        images: [
-          "https://i.pinimg.com/originals/8a/75/36/8a7536255580a91b60eea8e6e2bc2fe3.jpg",
-        ]
-      },
-      {
-        text: "Không làm gì ả",
-        images: []
-      }
     ],
     created_at: "",
     chef: {
-      id: 123321312,
-      name: "Nancy",
-      picture: "https://i.pinimg.com/originals/4a/5b/2e/4a5b2e54af1a42287e7d0af80fdc60c3.jpg",
-      followed: true
+      id: "",
+      name: "",
+      picture: "",
+      followed: false
     },
     liked: false,
     did_bookmark: false,
-    hearts: 31,
+    hearts: 0,
   },
   snaps: [
-    {
-      id: null,
-      chef_id: 3,
-      src: "https://i.ytimg.com/vi/hYvkSHYh_WQ/hqdefault.jpg"
-    },
-    {
-      id: null,
-      chef_id: 4,
-      src: "https://us.hola.com/en/imagenes/lifestyle/2017120810920/russian-girl-most-beautiful-in-world/0-17-240/anastasia-most-beautiful-t.jpg"
-    },
-    {
-      id: null,
-      chef_id: 5,
-      src: "http://sohanews.sohacdn.com/thumb_w/660/2017/photo-4-1509012560460-0-0-409-660-crop-1509012656515.jpg"
-    },
-    {
-      id: null,
-      chef_id: 6,
-      src: "https://ichef.bbci.co.uk/news/660/cpsprodpb/43A3/production/_103051371_hannahmackenzie.jpg"
-    },
-    {
-      id: null,
-      chef_id: 7,
-      src: "https://ichef.bbci.co.uk/news/660/cpsprodpb/43A3/production/_103051371_hannahmackenzie.jpg"
-    },
-    {
-      id: null,
-      chef_id: 8,
-      src: "http://imgt.taimienphi.vn/cf/Images/tt/2018/4/24/hinh-anh-anime-dep-2.jpg"
-    },
+    
     ],
   comments: [
-    {
-      chef: {
-        id: null,
-        picture: "https://img-global.cpcdn.com/005_steps/ff1a4f8e0519f866/480x360cq70/photo.jpg",
-      },
-      text: "21212",
-      created_at: "",
-    }
+    
   ]
 }
  
@@ -135,7 +85,66 @@ export default function dish(state = initialStae, action) {
         ]
       }
     case DISH:
-      return action.payload
+      return state
+    case DISH_RECIPE:
+      return {
+        ...state,
+        recipe: {
+          ...state.recipe,
+          ...action.payload
+        }
+      }
+    case DISH_INGREDIENTS:
+      return {
+        ...state,
+        recipe: {
+          ...state.recipe,
+          ingredients: [
+            ...action.payload
+          ]
+        }
+      }
+    case DISH_STEPS:
+      Object.keys(action.payload).map((a) => {
+        console.log()
+      })
+
+      return {
+        ...state,
+        recipe: {
+          ...state.recipe,
+          steps: Object.keys(action.payload).map((a) => {
+            return ({
+              index: a,
+              text: action.payload[a].text,
+              images: action.payload[a].images[0] != null ? action.payload[a].images : []
+            })
+          })
+        }
+      }
+
+    case DISH_CHEF:
+      return {
+        ...state,
+        recipe: {
+          ...state.recipe,
+          chef: {
+            ...action.payload
+          }
+        }
+      }
+    
+    case DISH_SNAPS:
+      return {
+        ...state,
+        snaps: action.payload
+      }
+    case DISH_COMMENTS: 
+      return {
+        ...state,
+        comments: action.payload
+      }
+    
     default:
       return state
   }
