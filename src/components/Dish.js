@@ -168,11 +168,18 @@ CommentsContainer.Proptypes = {
 
 class Dish extends Component {
   state = {
-    value: 1,
+    value: 0,
   }
 
   componentWillMount() {
-    console.log(this.props.match)
+    const id = this.props.match.params.id
+    console.log(id)
+    this.props.actions.fetchDishRecipe(id)
+    this.props.actions.fetchDishIngredients(id)
+    this.props.actions.fetchDishSteps(id)
+    this.props.actions.fetchDishChef(id, this.props.user.userID.toString())
+    this.props.actions.fetchDishSnaps(id)
+    this.props.actions.fetchDishComments(id)
   }
 
   handleChange = (event, value) => {
@@ -180,7 +187,7 @@ class Dish extends Component {
   }
 
   handleLike = (id) => {
-    this.props.actions.like(id)
+    this.props.actions.fetchLike(this.props.dish.recipe.id, this.props.user.userID)
   }
 
   handleBookmark = (id) => {

@@ -59,7 +59,7 @@ class ExploreItem extends Component {
         </CardActionArea>
         <Divider/>
         <CardActions>
-          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.like(dish.id)}>
+          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.fetchLike(dish.id, user.userID)}>
             <Badge badgeContent={dish.hearts} classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.liked ? <FavoriteIcon color="secondary"/> : <FavoriteBorderIcon/>
