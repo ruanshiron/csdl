@@ -46,13 +46,14 @@ class Header extends Component {
   }
 
   authenticate = response => {
-    this.props.actions.facebookLogin({
+    this.props.actions.fetchLogin({
       isLoggedIn: true,
       userID: response.userID,
       name: response.name,
       email: response.email,
       picture: response.picture.data.url
     })
+
   }
 
   notificationsPopperRender = (messages, open, anchorEl, classes) => {
@@ -100,6 +101,10 @@ class Header extends Component {
     this.props.history.push("/chef/"+this.props.user.userID.toString())
   }
 
+  presentNewRecipe = () => {
+    if (this.props.user.userID != null) this.props.history.push("/edit/" + this.props.user.new_id)
+  }
+
   componentClicked = () => console.log("clicked");
 
   render() {
@@ -142,7 +147,7 @@ class Header extends Component {
               <ExploreIcon />
             </IconButton>
 
-            <IconButton color="inherit" component={Link} to= '/edit/21'>
+            <IconButton color="inherit" onClick={this.presentNewRecipe}>
               <EditIcon />
             </IconButton>
 

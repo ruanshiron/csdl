@@ -59,14 +59,14 @@ class ExploreItem extends Component {
         </CardActionArea>
         <Divider/>
         <CardActions>
-          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.fetchLike(dish.id, user.userID)}>
+          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.fetchLike(dish.id, user.userID, dish.liked)}>
             <Badge badgeContent={dish.hearts} classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.liked ? <FavoriteIcon color="secondary"/> : <FavoriteBorderIcon/>
             }
             </Badge>
           </IconButton>
-          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.bookmark(dish.id)}>
+          <IconButton size="small" disabled={!user.isLoggedIn} onClick={() => actions.fetchBookmark(dish.id, user.userID, dish.bookmark)}>
             <Badge badgeContent="Lưu" classes={{ badge: classes.badge }} style={{top:-4, right: 0}}>
             {
               dish.bookmark ? <BookmarkIcon color="primary"/> : <BookmarkBorderIcon/>

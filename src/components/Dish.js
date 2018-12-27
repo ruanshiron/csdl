@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { Paper, Badge, Chip, Grid, Avatar, Typography, Button, Divider, Tab, Tabs, Card, CardMedia, TextField, CardActionArea } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import Proptypes from 'prop-types'
 import CardHeader from '@material-ui/core/CardHeader' 
 import CardContent from '@material-ui/core/CardContent' 
@@ -83,7 +84,7 @@ function SnapsContainer(props) {
           <Grid item key={i} xs={12} sm={6} md={4} lg={4}>
             <Card square elevation={0}>
               <CardActionArea>
-              <CardMedia image={snap.src} style={{paddingTop: '100%', marginTop : 0}} />
+              <CardMedia image={snap} style={{paddingTop: '100%', marginTop : 0}} />
               </CardActionArea>
             </Card>
           </Grid>
@@ -106,7 +107,7 @@ SnapsContainer.Proptypes = {
 }
 
 function CommentsContainer(props) {
-  const {comments, user, onKeyPress} = props
+  const {comments, user, onKeyPress, onClick} = props
   return (
     <CardContent>
       <Grid container spacing={16}>
@@ -144,7 +145,7 @@ function CommentsContainer(props) {
         comments.map((comment, index) => (
           <Grid key= {index} container spacing={16}>
             <Grid item>
-              <IconButton style={{height:24, width:24}}>
+              <IconButton style={{height:24, width:24}} onClick={() => onClick(comment.chef.id)}>
                 <Avatar src={comment.chef.picture} style={{top:-12,height:24, width:24}}/>
               </IconButton>
             </Grid>
@@ -174,12 +175,12 @@ class Dish extends Component {
   componentWillMount() {
     const id = this.props.match.params.id
     console.log(id)
-    this.props.actions.fetchDishRecipe(id)
+    this.props.actions.fetchDishRecipe(id, this.props.user.userID)
     this.props.actions.fetchDishIngredients(id)
     this.props.actions.fetchDishSteps(id)
-    this.props.actions.fetchDishChef(id, this.props.user.userID.toString())
     this.props.actions.fetchDishSnaps(id)
     this.props.actions.fetchDishComments(id)
+    this.props.actions.fetchDishChef(id, this.props.user.userID)
   }
 
   handleChange = (event, value) => {
@@ -187,11 +188,11 @@ class Dish extends Component {
   }
 
   handleLike = (id) => {
-    this.props.actions.fetchLike(this.props.dish.recipe.id, this.props.user.userID)
+    this.props.actions.fetchLike(this.props.dish.recipe.id, this.props.user.userID, this.props.dish.recipe.liked)
   }
 
   handleBookmark = (id) => {
-    this.props.actions.bookmark(id)
+    this.props.actions.fetchBookmark(this.props.dish.recipe.id, this.props.user.userID, this.props.dish.recipe.did_bookmark)
   }
 
   handleFollow = (targetID) => {
@@ -201,7 +202,7 @@ class Dish extends Component {
   handleCommentKeyPress = (event) => {
     const {key} = event
     if (key === 'Enter') {
-      this.props.actions.comment(event.target.value)
+      this.props.actions.fetchComment(this.props.dish.recipe.id, this.props.user, event.target.value)
       event.target.value = ''
       event.preventDefault()
     }
@@ -215,15 +216,20 @@ class Dish extends Component {
     const image = e.target.files[0]
     const formData = new FormData()
     formData.append('image', image)
-    formData.append('id', 312312)
+    formData.append('id', this.props.dish.recipe.id)
+    formData.append('userID', this.props.user.userID)
 
     this.props.actions.fetchUploadImage(formData)
+  }
+
+  presentEdit = () => {
+    this.props.history.push('/edit/' + this.props.dish.recipe.id)
   }
 
   render() {
     const { classes, dish, user } = this.props
     const { value } = this.state
-    const { recipe, snaps, comments } = dish
+    const { recipe, snaps, comments, isOwnedUser } = dish
 
     return (
       <main>
@@ -299,14 +305,14 @@ class Dish extends Component {
               
               {value === 0 && <RecipeContainer recipe={recipe} className={classes.chip} />}
               {value === 1 && <SnapsContainer  snaps={snaps} OnUploadImage={this.handleOnUploadImage}/>}
-              {value === 2 && <CommentsContainer onKeyPress={this.handleCommentKeyPress} user={user} comments={comments}/>}
+              {value === 2 && <CommentsContainer onClick={this.handleAvatarClick} onKeyPress={this.handleCommentKeyPress} user={user} comments={comments}/>}
               
             </Card>
           </Grid>
 
-          <Button variant='fab' color='primary' className={classes.fab}>
+          {isOwnedUser && <Button onClick={this.presentEdit} variant='fab' color='primary' className={classes.fab}>
             <EditIcon/>
-          </Button>
+          </Button>}
         </div>
       </main> 
     ) 

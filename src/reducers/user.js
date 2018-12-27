@@ -15,10 +15,9 @@ const initialState =
 export default function user(state = initialState, action) {
     switch (action.type) {
         case FACEBOOK_LOGIN:
-            //  console.log(action.user)
+        
             return {
                 ...action.user,
-                userID: 1
             }
         default:
             return state

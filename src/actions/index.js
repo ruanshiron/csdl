@@ -10,11 +10,13 @@ export const tapMessage = (id) => ({type: types.TAP_MESSAGE, id})
 
 export const like = (id) => ({type: types.LIKE, id})
 export const bookmark = (id) => ({type: types.BOOKMARK, id})
-export const comment = (text) => ({type: types.COMMENT, text})
+export const comment = (data) => ({type: types.COMMENT, data})
 
 export const follow = (targetID) => ({type: types.FOLLOW, targetID})
 
 export const post = (data) => ({type: types.POST, data})
+
+export const snap = (data) => ({type: types.SNAP, data})
 
 export const explore = (data) => ({
   type: types.EXPLORE, 
@@ -33,6 +35,11 @@ export const chef = (data) => ({
 
 export const edit = (data) => ({
   type: types.EDIT,
+  payload: data
+})
+
+export const submit = (data) => ({
+  type: types.SUBMIT,
   payload: data
 })
 
@@ -63,6 +70,26 @@ export const dishSnaps = (data) => ({
 
 export const dishComments = (data) => ({
   type: types.DISH_COMMENTS,
+  payload: data
+})
+
+export const editRecipe = (data) => ({
+  type: types.EDIT_RECIPE,
+  payload: data
+})
+
+export const editIngredients = (data) => ({
+  type: types.EDIT_INGREDIENTS,
+  payload: data
+})
+
+export const editSteps = (data) => ({
+  type: types.EDIT_STEPS,
+  payload: data
+})
+
+export const editImage = (data) => ({
+  type: types.EDIT_IMAGE,
   payload: data
 })
 //API FETCHER
@@ -115,9 +142,9 @@ export const fetchEdit = (data) => {
   }
 }
 
-export const fetchLike = (id, userID) => {
+export const fetchLike = (id, userID, liked) => {
   return (dispath) => {
-    return axios.post(API + 'like', {id, userID})
+    return axios.post(API + 'like', {id, userID, liked})
       .then(response => {
         dispath(like(response.data.id))
       })
@@ -127,11 +154,11 @@ export const fetchLike = (id, userID) => {
   }
 }
 
-export const fetchBookmark = (data) => {
+export const fetchBookmark = (id, userID, did_bookmark) => {
   return (dispath) => {
-    return axios.post(API + 'bookmark', {data})
+    return axios.post(API + 'bookmark', {id, userID, did_bookmark: did_bookmark})
       .then(response => {
-        dispath(bookmark(response.data))
+        dispath(bookmark(response.data.id))
       })
       .catch(err => {
         throw(err)
@@ -152,11 +179,11 @@ export const fetchFollow = (data) => {
 }
 
 
-export const fetchComment = (data) => {
+export const fetchComment = (id, user, text) => {
   return (dispath) => {
-    return axios.post(API + 'comment', {data})
+    return axios.post(API + 'comment', {id, userID: user.userID, text: text})
       .then(response => {
-        dispath(comment(response.data))
+        dispath(comment({text: response.data.text, chef: {id: user.userID, picture: user.picture}}))
       })
       .catch(err => {
         throw(err)
@@ -178,9 +205,10 @@ export const fetchPost = (data) => {
 
 export const fetchUploadImage = (data) => {
   return (dispath) => {
-    return axios.post(API + 'image', data)
+    return axios.post(API + 'upload', data)
       .then(response => {
-        dispath(comment(response.data))
+        console.log(response.data)
+        dispath(snap(response.data))
       })
       .catch(err => {
         throw(err)
@@ -188,9 +216,9 @@ export const fetchUploadImage = (data) => {
   }
 }
 
-export const fetchDishRecipe = (id) => {
+export const fetchDishRecipe = (id, userID) => {
   return (dispath) => {
-    return axios.post(API + 'dish/recipe', {id})
+    return axios.post(API + 'dish/recipe', {id, userID})
       .then(response => {
         dispath(dishRecipe(response.data))
       })
@@ -228,7 +256,8 @@ export const fetchDishChef = (id, userID) => {
   return (dispath) => {
     return axios.post(API + 'dish/chef', {id, userID})
       .then(response => {
-        dispath(dishChef(response.data))
+        console.log({data: response.data, userID})
+        dispath(dishChef({data: response.data, userID}))
       })
       .catch(err => {
         throw(err)
@@ -260,3 +289,74 @@ export const fetchDishComments = (id) => {
   }
 }
 
+export const fetchLogin = (user) => {
+  return (dispath) => { 
+    return axios.post(API + 'login', {user: user})
+    .then(response => { 
+      dispath(facebookLogin({...user, new_id: response.data.id}))
+    })
+    .catch(err => {
+      throw(err)
+    })
+  }
+}
+
+export const fetchEditRecipe = (id) => {
+  return (dispath) => {
+    return axios.post(API + 'edit/recipe', {id})
+      .then(response => {
+        dispath(editRecipe(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchEditIngredients = (id) => {
+  return (dispath) => {
+    return axios.post(API + 'edit/ingredients', {id})
+      .then(response => {
+        dispath(editIngredients(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchEditSteps = (id) => {
+  return (dispath) => {
+    return axios.post(API + 'edit/steps', {id})
+      .then(response => {
+        dispath(editSteps(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchUploadBuffer = (data, type) => {
+  return (dispath) => {
+    return axios.post(API + 'buffer', data)
+      .then(response => {
+        dispath(editImage({...response.data, type}))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchSubmit = (data) => {
+  return (dispath) => {
+    return axios.post(API + 'submit', data)
+      .then(response => {
+        dispath(submit(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}

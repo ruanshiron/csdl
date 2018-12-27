@@ -17,11 +17,22 @@ class Edit extends Component {
 
 
   componentDidMount() {
-
+    const id = this.props.match.params.id
+    console.log(id)
+    this.props.actions.fetchEditRecipe(id)
+    this.props.actions.fetchEditIngredients(id)
+    this.props.actions.fetchEditSteps(id)
   }
 
-  componentWillUnmount() {
-
+  componentDidUpdate() {
+    document.getElementById('name').value = this.props.edit.name
+    document.getElementById('description').value = this.props.edit.description
+    this.props.edit.ingredients.map((ingredient, index) => {
+      document.getElementById('ingredients'+index.toString()).value = ingredient
+    })
+    this.props.edit.steps.map((step, index) => {
+      document.getElementById('steps'+index.toString()).value = step.text
+    })
   }
 
 
@@ -48,7 +59,9 @@ class Edit extends Component {
   handleOnSubmit = (edit) => {
     if (!this.isCorrect(edit)) {
       console.log(false)
-    } else console.log(true)
+    } else {
+      this.props.actions.fetchSubmit(edit)
+    }
   } 
 
   
@@ -64,7 +77,7 @@ class Edit extends Component {
       case 'steps':
         data[type].push({
           text: "",
-          snaps: [
+          images: [
             "",
             "",
             ""
@@ -136,6 +149,14 @@ class Edit extends Component {
     }
 
   }
+
+  OnUploadPicture = (e, type) => {
+    const image = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', image)
+
+    this.props.actions.fetchUploadBuffer(formData, type)
+  }
  
   render() {
     const { classes} = this.props
@@ -146,14 +167,17 @@ class Edit extends Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={8} justify='center'>
             <Card square className={classes.card}>
-            
-              <CardActionArea>
-                <CardMedia
+              <input onChange={(e) => this.OnUploadPicture(e, 'picture')} accept="image/*" style={{display:'none'}} id="edit-picture" type="file" encType="multipart/form-data"/>
+              <label htmlFor="edit-picture">
+              <CardActionArea component="span">
+                {
+                  edit.picture != null && 
+                  <CardMedia
                   className={classes.media}
-                  image="http://sohanews.sohacdn.com/zoom/640_360/2017/photo1506260210253-1506260211967-0-27-314-533-crop-1506260291957.jpg"
+                  image={edit.picture}
                   title="dsasda"
-                  style={{display: 'none'}}
-                />
+                  />
+                }
                 <CardContent>
                   <Grid container alignItems='center' direction='column'>
                 
@@ -165,6 +189,7 @@ class Edit extends Component {
                   </Grid>
                 </CardContent>
               </CardActionArea>
+              </label>
 
               <CardContent>
                 <TextField
@@ -178,9 +203,7 @@ class Edit extends Component {
                     },
                   }}
                   InputLabelProps={{
-                    classes: {
-                      root: classes.resize
-                    }
+                    shrink: true,
                   }}
                   margin="dense"
                   variant="outlined"
@@ -191,6 +214,9 @@ class Edit extends Component {
                   id="description"
                   label="Thêm mô tả..."
                   className={classNames(classes.textField, classes.dense)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   margin="dense"
                   variant="outlined"
                   fullWidth
@@ -268,10 +294,12 @@ class Edit extends Component {
                     />
                     <Grid container spacing={8}>
                     {
-                      step.snaps.map((snap, i) => (
+                      step.images.map((snap, i) => (
                         <Grid key={i} item xs={12} sm={4} md={4} lg={4}>
                           <Card style={{marginBottom: 10, height: 181}} square elevation={0}>
-                            <CardActionArea onClick={() => this.handleToggleStepPhoto(index, i)}>
+                          <input onChange={(e) => this.OnUploadPicture(e, 'step-'+index+'-'+i)} accept="image/*" style={{display:'none'}} id={'step-'+index+'-'+i} type="file" encType="multipart/form-data"/>
+                            <label htmlFor={'step-'+index+'-'+i}>
+                            <CardActionArea component="span">
                               {
                               snap!=="" ? 
                                 <CardMedia image={snap} style={{paddingTop: '100%', marginTop : 0}} /> 
@@ -283,6 +311,7 @@ class Edit extends Component {
                                 </CardContent>
                               }
                             </CardActionArea>
+                            </label>
                           </Card>
                         </Grid>  
                       ))

@@ -3,6 +3,7 @@ import {
   COMMENT,
   BOOKMARK,
   FOLLOW,
+  SNAP,
   DISH,
   DISH_RECIPE,
   DISH_INGREDIENTS,
@@ -13,6 +14,7 @@ import {
 } from '../constants/ActionTypes'
 
 const initialStae = {
+  isOwnedUser: false, 
   recipe: {
     id: null,
     name:"",
@@ -80,8 +82,20 @@ export default function dish(state = initialStae, action) {
       return {
         ...state,
         comments: [
-          {chef: {id: null, picture:"https://img-global.cpcdn.com/005_steps/ff1a4f8e0519f866/480x360cq70/photo.jpg"}, text: action.text, created_at: Date()},
+          {
+            chef: action.data.chef,
+            text: action.data.text, 
+            created_at: Date()
+          },
           ...state.comments,
+        ]
+      }
+    case SNAP: 
+      return {
+        ...state,
+        snaps: [
+          ...state.snaps,
+          action.data.src
         ]
       }
     case DISH:
@@ -105,9 +119,6 @@ export default function dish(state = initialStae, action) {
         }
       }
     case DISH_STEPS:
-      Object.keys(action.payload).map((a) => {
-        console.log()
-      })
 
       return {
         ...state,
@@ -124,12 +135,14 @@ export default function dish(state = initialStae, action) {
       }
 
     case DISH_CHEF:
+      console.log(action.payload.userID.toString() === action.payload.data.id.toString())
       return {
         ...state,
+        isOwnedUser: action.payload.userID.toString() === action.payload.data.id.toString(),
         recipe: {
           ...state.recipe,
           chef: {
-            ...action.payload
+            ...action.payload.data
           }
         }
       }
