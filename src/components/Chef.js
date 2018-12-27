@@ -63,8 +63,8 @@ class Chef extends Component {
     this.setState({ value });
   }
 
-  handleFollow = (target) => {
-    this.props.actions.follow(target)
+  handleFollow = (active) => {
+    this.props.actions.fetchFollow(this.props.chef.chef.id, this.props.user.userID, this.props.chef.chef.followed)
   }
 
   componentWillMount() {
@@ -72,12 +72,16 @@ class Chef extends Component {
     console.log(this.props.match.params.id)
 
     this.props.actions.fetchChefProfile(id)
+    this.props.actions.fetchChefRecipes(id)
+    this.props.actions.fetchChefSnaps(id)
+    this.props.actions.fetchChefBookmarks(id)
   }
 
   componentDidMount() {
   }
 
   componentDidUpdate() {
+    document.title = this.props.chef.chef.name
   }
 
 
@@ -137,9 +141,9 @@ class Chef extends Component {
                       color={value===index ? "secondary" : "inherit"}
                       onClick={() => this.handleChange(index)}
                     >
-                      {index===0 && <><EditIcon/> 12</>}
-                      {index===1 && <><PhotoCameraIcon/> 12</>}
-                      {index===2 && <><BookmarkIcon/> 12</>}  
+                      {index===0 && <><EditIcon/> {this.props.chef.recipes.length}</>}
+                      {index===1 && <><PhotoCameraIcon/> {this.props.chef.snaps.length}</>}
+                      {index===2 && <><BookmarkIcon/> {this.props.chef.bookmarks.length}</>}  
                     </Button>
                   ))
                 }

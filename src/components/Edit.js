@@ -62,6 +62,10 @@ class Edit extends Component {
       console.log(false)
     } else {
       this.props.actions.fetchSubmit(edit)
+      this.setState({
+        isSubmitted: true
+      })
+      this.props.history.push('/dish/' + edit.id)
     }
   } 
 
@@ -158,10 +162,19 @@ class Edit extends Component {
 
     this.props.actions.fetchUploadBuffer(formData, type)
   }
+
+  presentDish = () => {
+    
+  }
+
+
  
   render() {
     const { classes} = this.props
+    const { isSubmitted } = this.props.edit
     var { edit } = this.props
+
+    
 
     return (
       <main>

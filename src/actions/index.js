@@ -12,7 +12,7 @@ export const like = (id) => ({type: types.LIKE, id})
 export const bookmark = (id) => ({type: types.BOOKMARK, id})
 export const comment = (data) => ({type: types.COMMENT, data})
 
-export const follow = (targetID) => ({type: types.FOLLOW, targetID})
+export const follow = (data) => ({type: types.FOLLOW, payload: data})
 
 export const post = (data) => ({type: types.POST, data})
 
@@ -97,6 +97,21 @@ export const chefProfile = (data) => ({
   type: types.CHEF_PROFILE,
   payload: data
 })
+
+export const chefRecipes = (data) => ({
+  type: types.CHEF_RECIPES,
+  payload: data
+})
+
+export const chefSnaps = (data) => ({
+  type: types.CHEF_SNAPS,
+  payload: data
+})
+
+export const chefBookmarks = (data) => ({
+  type: types.CHEF_BOOKMARKS,
+  payload: data
+})
 //API FETCHER
 
 export const fetchExplore = (data) => {
@@ -164,18 +179,6 @@ export const fetchBookmark = (id, userID, did_bookmark) => {
     return axios.post(API + 'bookmark', {id, userID, did_bookmark: did_bookmark})
       .then(response => {
         dispath(bookmark(response.data.id))
-      })
-      .catch(err => {
-        throw(err)
-      })
-  }
-}
-
-export const fetchFollow = (data) => {
-  return (dispath) => {
-    return axios.post(API + 'follow', {data})
-      .then(response => {
-        dispath(follow(response.data))
       })
       .catch(err => {
         throw(err)
@@ -371,6 +374,55 @@ export const fetchChefProfile = (chef_id) => {
     return axios.post(API + 'chef/profile', {chef_id})
       .then(response => {
         dispath(chefProfile(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchChefRecipes = (chef_id) => {
+  return (dispath) => {
+    return axios.post(API + 'chef/recipes', {chef_id})
+      .then(response => {
+        dispath(chefRecipes(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchChefSnaps= (chef_id) => {
+  return (dispath) => {
+    return axios.post(API + 'chef/snaps', {chef_id})
+      .then(response => {
+        dispath(chefSnaps(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchChefBookmarks= (chef_id) => {
+  return (dispath) => {
+    return axios.post(API + 'chef/bookmarks', {chef_id})
+      .then(response => {
+        dispath(chefBookmarks(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchFollow = (chef_id, userID, active) => {
+  return (dispath) => {
+    return axios.post(API + 'follow', {chef_id, userID, active})
+      .then(response => {
+        console.log(response.data)
+        dispath(follow(response.data.id))
       })
       .catch(err => {
         throw(err)

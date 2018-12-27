@@ -147,7 +147,7 @@ class Header extends Component {
               <ExploreIcon />
             </IconButton>
 
-            <IconButton color="inherit" onClick={this.presentNewRecipe}>
+            <IconButton disabled={!isLoggedIn} color="inherit" onClick={this.presentNewRecipe}>
               <EditIcon />
             </IconButton>
 

@@ -15,17 +15,25 @@ class Explore extends Component {
     this.props.actions.fetchExplore({userID: this.props.user.userID, value})
   }
 
-  componentDidMount() {
-    if (this.props.explore.didMount === false) {
-      this.props.actions.fetchExplore({userID: this.props.user.ID, value: 0})
-      this.props.actions.fetchExplore({userID: this.props.user.ID, value: 1})
-      this.props.actions.fetchExplore({userID: this.props.user.ID, value: 2})
+  componentWillMount() {
+    if (this.props.explore.didMount === false, this.props.user.isLoggedIn == false) {
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value: 0})
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value: 1})
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value: 2})
+      this.props.explore.didMount = false
     }
-    this.props.explore.didMount = true
   }
 
   componentDidUpdate() {
     document.title = 'Khám phá món ngon nào!'
+    console.log(this.props.explore.didMount)
+    if (this.props.user.isLoggedIn == true, this.props.explore.didMount === false) {
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value: 0})
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value: 1})
+      this.props.actions.fetchExplore({userID: this.props.user.userID, value: 2})
+      
+      this.props.explore.didMount = true
+    }
   }
 
   handleChangeValue(value) {

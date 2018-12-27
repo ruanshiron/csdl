@@ -232,7 +232,7 @@ const y = `select r.recipe_id,
               ) b on b.recipe_id = r.recipe_id
             where r.recipe_is_new = false 
             order by recipe_like DESC
-            limit 3`;
+            limit 12`;
 
 const z = `select r.recipe_id, 
                   r.recipe_name, 
@@ -260,7 +260,7 @@ const z = `select r.recipe_id,
               ) b on b.recipe_id = r.recipe_id
               where r.recipe_is_new = false
             order by r.recipe_created DESC
-            limit 3`;
+            limit 12`;
   if ((req.body.value) == 0) {
     db.query(x, [req.body.userID], (err, res0) => {
       if (err) {
@@ -501,7 +501,10 @@ router.post('/edit/ingredients', (req, response) => {
   const params = [req.body.id.toString()] 
 
   db.query(qIngredients, params, (err, res) => {
-    if (err) return next(err)
+    if (err) {
+      console.error(err)
+      return
+    }
     response.json(
       res.rows.map((row) => {
         return row['ingredient']
@@ -618,4 +621,169 @@ router.post('/chef/profile', (req, response) => {
     })
 })
 
-router.post('')
+router.post('/chef/recipes', (req, response) => {
+  const qChefRicipes = `select r.recipe_id, 
+                          r.recipe_name, 
+                          r.recipe_image,
+                          r.recipe_des, 
+                          (select count(likes.recipe_id) from likes where likes.recipe_id = r.recipe_id) recipe_like,
+                          COALESCE(l.likeds, false) liked, 
+                          COALESCE(b.actives, false) active 
+                        from recipes r
+                        left join (
+                        select *, (case 
+                            when chef_id not in($1) 
+                            then false 
+                            else true
+                          end) likeds from likes 
+                        where chef_id = $1
+                        ) l on l.recipe_id = r.recipe_id
+                        left join (
+                        select *, (case 
+                            when chef_id not in($1) 
+                            then false 
+                            else true
+                          end) actives from bookmarks
+                        where chef_id = $1
+                        ) b on b.recipe_id = r.recipe_id
+                        where r.recipe_is_new = false
+                        and r.chef_id = $1
+                        order by r.recipe_created DESC`
+
+  const params = [req.body.chef_id]
+
+  console.log(req.body)
+
+  db.query(qChefRicipes, params)
+    .then(res => {
+      response.json(res.rows.map(item => {
+        return {
+          id: item.recipe_id,
+          name: item.recipe_name,
+          description: item.recipe_des,
+          image: item.recipe_image,
+          hearts: item.recipe_like,
+          liked: item.liked,
+          bookmark: item.active,
+        }
+      }))
+    })
+    .catch(err => {
+      console.error(err.stack)
+    })
+})
+
+
+router.post('/chef/snaps', (req, response) => {
+  const qChefSnaps = `select * from snaps where chef_id = $1`
+
+  const params = [req.body.chef_id]
+
+  console.log(req.body)
+
+  db.query(qChefSnaps, params)
+    .then(res => {
+      response.json(
+        res.rows.map(item => {
+          return {
+            recipe_id: item.recipe_id,
+            src: item.image_src
+          }
+        })
+      )
+    })
+    .catch(err => {
+      console.error(err.stack)
+    })
+})
+
+router.post('/chef/bookmarks', (req, response) => {
+  const qChefBookmarks = `select r.recipe_id, 
+                            r.recipe_name, 
+                            r.recipe_image,
+                            r.recipe_des, 
+                            (select count(likes.recipe_id) from likes where likes.recipe_id = r.recipe_id) recipe_like,
+                            COALESCE(l.likeds, false) liked, 
+                            COALESCE(b.actives, false) active 
+                          from recipes r
+                          left join (
+                          select *, (case 
+                              when chef_id not in($1) 
+                              then false 
+                              else true
+                            end) likeds from likes 
+                          where chef_id = $1
+                          ) l on l.recipe_id = r.recipe_id
+                          left join (
+                          select *, (case 
+                              when chef_id not in($1) 
+                              then false 
+                              else true
+                            end) actives from bookmarks
+                          where chef_id = $1
+                          ) b on b.recipe_id = r.recipe_id
+                          where r.recipe_is_new = false
+                          and active = true
+                          order by r.recipe_created DESC`
+
+  const params = [req.body.chef_id]
+
+  console.log(req.body)
+
+  db.query(qChefBookmarks, params)
+    .then(res => {
+      response.json(
+        res.rows.map( item => {
+          return {
+            id: item.recipe_id,
+            name: item.recipe_name,
+            description: item.recipe_des,
+            image: item.recipe_image,
+            hearts: item.recipe_like,
+            liked: item.liked,
+            bookmark: item.active,
+          }
+        })
+      )
+    })
+    .catch(err => {
+      console.error(err.stack)
+    })
+})
+
+
+router.post('/follow', (req, response) => {
+  const qFollow = `insert into follows (from_chef_id, to_chef_id, follow_created_at) 
+                  select CAST($2 AS VARCHAR), CAST($1 AS VARCHAR), now()
+                  where not exists (select 1 from follows where from_chef_id = $2 and to_chef_id = $1)`
+  
+  const qDisFollow = 'delete from follows where follows.from_chef_id = $2 and follows.to_chef_id = $1'
+
+  const params = [req.body.chef_id, req.body.userID]
+
+  if (req.body.active == false)
+    db.query(qFollow, params, (err, res) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+        if (res.rowCount == 0) {
+          response.json({
+            id: null
+          })
+        } else {
+          response.json({id: req.body.chef_id})
+        }
+    })
+  else 
+    db.query(qDisFollow, params, (err, res) => {
+      if (err) throw(err)
+      if (res.rowCount == 0) {
+        response.json({
+          id: null
+        })
+      } else {
+        response.json({id: req.body.chef_id})
+      }
+    })
+})

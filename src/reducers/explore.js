@@ -1,7 +1,8 @@
 import {
   LIKE,
   EXPLORE,
-  BOOKMARK
+  BOOKMARK,
+  FACEBOOK_LOGIN
 } from '../constants/ActionTypes'
 
 // {
@@ -29,9 +30,11 @@ let concatAndDeDuplicateObjectsDeep = (p, ...arrs) => [ ...new Set( [].concat(..
 
 export default function explore(state = initialState, action) {
   switch (action.type) {
-    
+    case FACEBOOK_LOGIN:
+  
+      return initialState
+
     case LIKE:
-    console.log(action.id)
       return {
         ...state,
         follow: state.follow.map(recipe => (

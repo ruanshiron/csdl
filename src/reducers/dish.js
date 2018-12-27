@@ -11,7 +11,12 @@ import {
   DISH_CHEF,
   DISH_SNAPS,
   DISH_COMMENTS,
+  FACEBOOK_LOGIN,
 } from '../constants/ActionTypes'
+
+import {
+  fetchDish
+} from '../actions'
 
 const initialStae = {
   isOwnedUser: false, 
@@ -47,26 +52,38 @@ const initialStae = {
  
 export default function dish(state = initialStae, action) {
   switch (action.type) {
+    case FACEBOOK_LOGIN:
+      return initialStae
+
     case LIKE:
       return {
         ...state,
-        recipe: state.recipe.id !== action.id ? state.recipe :
+        recipe: state.recipe.id !== action.id ? {
+            ...state.recipe,
+            liked: !state.recipe.liked,
+            hearts: Number(state.recipe.hearts),
+        } :
           {
             ...state.recipe,
             liked: !state.recipe.liked,
-            hearts: !state.recipe.liked === true? state.recipe.hearts+1 : state.recipe.hearts-1,
+            hearts: !state.recipe.liked === true? Number(state.recipe.hearts)+1 : Number(state.recipe.hearts)-1,
           }
       }
     case BOOKMARK:
       return {
         ...state,
-        recipe: state.recipe.id !== action.id ? state.recipe :
+        recipe: state.recipe.id !== action.id ? 
+          {
+            ...state.recipe,
+            bookmark: !state.recipe.bookmark
+          } :
           {
             ...state.recipe,
             did_bookmark: !state.recipe.did_bookmark,
           }
       }
     case FOLLOW: 
+    console.log(action.payload)
       return {
         ...state,
         recipe:
@@ -74,7 +91,7 @@ export default function dish(state = initialStae, action) {
             ...state.recipe,
             chef: {
               ...state.recipe.chef,
-              followed: !state.recipe.chef.followed,
+              followed: action.payload == state.recipe.chef.id ? !state.recipe.chef.followed : state.recipe.chef.followed
             }
           }
       }

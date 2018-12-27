@@ -32,3 +32,6 @@ export const EDIT_STEPS = 'EDIT_STEPS'
 export const EDIT_IMAGE = 'EDIT_IMAGE'
 
 export const CHEF_PROFILE = 'CHEF_PROFILE'
+export const CHEF_RECIPES = 'CHEF_RECIPES'
+export const CHEF_SNAPS = 'CHEF_SNAPS'
+export const CHEF_BOOKMARKS = 'CHEF_BOOKMARKS'

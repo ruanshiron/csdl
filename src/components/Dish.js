@@ -186,6 +186,16 @@ class Dish extends Component {
 
   componentDidUpdate() {
     document.title = this.props.dish.recipe.name
+    if (this.props.user.isLoggedIn, this.props.dish.recipe.id == null) {
+      const id = this.props.match.params.id
+      console.log(id)
+      this.props.actions.fetchDishRecipe(id, this.props.user.userID)
+      this.props.actions.fetchDishIngredients(id)
+      this.props.actions.fetchDishSteps(id)
+      this.props.actions.fetchDishSnaps(id)
+      this.props.actions.fetchDishComments(id)
+      this.props.actions.fetchDishChef(id, this.props.user.userID)
+    }
   }
 
   handleChange = (event, value) => {
@@ -201,7 +211,7 @@ class Dish extends Component {
   }
 
   handleFollow = (targetID) => {
-    this.props.actions.follow(targetID)
+    this.props.actions.fetchFollow(this.props.dish.recipe.chef.id, this.props.user.userID, this.props.dish.recipe.chef.followed)
   }
 
   handleCommentKeyPress = (event) => {
@@ -265,21 +275,21 @@ class Dish extends Component {
                 }
                 action={
                   <>
-                  <IconButton style={{marginTop: 12}} onClick={() => this.handleLike(recipe.id)} >
+                  <IconButton disabled={!this.props.user.isLoggedIn} style={{marginTop: 12}} onClick={() => this.handleLike(recipe.id)} >
                     <Badge badgeContent={recipe.hearts} classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
                     {
                       recipe.liked ? <FavoriteIcon color="secondary" /> : <FavoriteBorderIcon color="inherit" />
                     }
                     </Badge>
                   </IconButton>
-                  <IconButton style={{marginTop: 12}} onClick={() => this.handleBookmark(recipe.id)}>
+                  <IconButton disabled={!this.props.user.isLoggedIn} style={{marginTop: 12}} onClick={() => this.handleBookmark(recipe.id)}>
                     <Badge badgeContent="Lưu" classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
                     {
                       recipe.did_bookmark ? <BookmarkIcon color="primary" /> : <BookmarkBorderIcon color="inherit" />
                     }
                     </Badge>
                   </IconButton>
-                  <IconButton onClick={() => this.handleFollow(recipe.chef.id)} style={{marginRight: 10, marginTop:12}}>
+                  <IconButton disabled={!this.props.user.isLoggedIn} onClick={() => this.handleFollow(recipe.chef.id)} style={{marginRight: 10, marginTop:12}}>
                     <Badge badgeContent="..." classes={{ badge: classes.badge }} style={{top:-4, right:0}}>
                     {
                       recipe.chef.followed ? <NotificationsIcon color="primary"/> :  <NotificationsIcon color="inherit"/>
