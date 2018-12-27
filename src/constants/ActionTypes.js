@@ -30,3 +30,5 @@ export const EDIT_RECIPE = 'EDIT_RECIPE'
 export const EDIT_INGREDIENTS = 'EDIT_INGREDIENTS'
 export const EDIT_STEPS = 'EDIT_STEPS'
 export const EDIT_IMAGE = 'EDIT_IMAGE'
+
+export const CHEF_PROFILE = 'CHEF_PROFILE'

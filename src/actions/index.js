@@ -92,6 +92,11 @@ export const editImage = (data) => ({
   type: types.EDIT_IMAGE,
   payload: data
 })
+
+export const chefProfile = (data) => ({
+  type: types.CHEF_PROFILE,
+  payload: data
+})
 //API FETCHER
 
 export const fetchExplore = (data) => {
@@ -354,6 +359,18 @@ export const fetchSubmit = (data) => {
     return axios.post(API + 'submit', data)
       .then(response => {
         dispath(submit(response.data))
+      })
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const fetchChefProfile = (chef_id) => {
+  return (dispath) => {
+    return axios.post(API + 'chef/profile', {chef_id})
+      .then(response => {
+        dispath(chefProfile(response.data))
       })
       .catch(err => {
         throw(err)

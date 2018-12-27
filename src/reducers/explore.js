@@ -29,7 +29,9 @@ let concatAndDeDuplicateObjectsDeep = (p, ...arrs) => [ ...new Set( [].concat(..
 
 export default function explore(state = initialState, action) {
   switch (action.type) {
+    
     case LIKE:
+    console.log(action.id)
       return {
         ...state,
         follow: state.follow.map(recipe => (
@@ -37,7 +39,7 @@ export default function explore(state = initialState, action) {
           {
             ...recipe,
             liked: !recipe.liked,
-            hearts: recipe.liked === true ? recipe.hearts-1 : recipe.hearts+1,
+            hearts: recipe.liked === true ? Number(recipe.hearts)-1 : Number(recipe.hearts)+1,
           } : recipe
         )),
         hot: state.hot.map(recipe => (
@@ -45,7 +47,7 @@ export default function explore(state = initialState, action) {
           {
             ...recipe,
             liked: !recipe.liked,
-            hearts: recipe.liked === true ? recipe.hearts-1 : recipe.hearts+1,
+            hearts: recipe.liked === true ? Number(recipe.hearts)-1 : Number(recipe.hearts)+1,
           } : recipe
         )),
         new: state.new.map(recipe => (
@@ -53,7 +55,7 @@ export default function explore(state = initialState, action) {
           {
             ...recipe,
             liked: !recipe.liked,
-            hearts: recipe.liked === true ? recipe.hearts-1 : recipe.hearts+1,
+            hearts: recipe.liked === true ? Number(recipe.hearts)-1 : Number(recipe.hearts)+1,
           } : recipe
         ))
       }

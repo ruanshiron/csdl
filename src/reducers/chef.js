@@ -2,16 +2,17 @@ import {
   LIKE,
   BOOKMARK,
   FOLLOW,
-  CHEF
+  CHEF,
+  CHEF_PROFILE
 } from '../constants/ActionTypes'
 
 const initialStae = {
   chef: {
     id: null,
-    name: "Nguyễn Thé Vinh",
-    description: "Vui vẻ hòa đồng dễ tính",
-    followed: true,
-    picture: "https://kenh14cdn.com/2017/2199271719937275775654483650112764994216562o-1506392224835.jpg"
+    name: "",
+    description: "",
+    followed: false,
+    picture: ""
   },
   recipes: [
     {
@@ -149,6 +150,19 @@ export default function dish(state = initialStae, action) {
       }
     case CHEF:
       return action.payload
+
+    case CHEF_PROFILE: 
+      console.log(action.payload)
+      return {
+        ...state,
+        chef: {
+          ...state.chef,
+          id: action.payload.id,
+          name: action.payload.name,
+          picture: action.payload.picture,
+        }
+        
+      }
     default:
       return state
   }

@@ -54,7 +54,9 @@ export default function dish(state = initialStae, action) {
             return ({
               index: a,
               text: action.payload[a].text,
-              images: action.payload[a].images[0] != null ? action.payload[a].images : ["","",""]
+              images: Array("", "", "").map((image, index) => {
+                return action.payload[a].images[index] != null ? action.payload[a].images[index] : image
+              })
             })
           })
       }

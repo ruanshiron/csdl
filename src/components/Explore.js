@@ -24,6 +24,10 @@ class Explore extends Component {
     this.props.explore.didMount = true
   }
 
+  componentDidUpdate() {
+    document.title = 'Khám phá món ngon nào!'
+  }
+
   handleChangeValue(value) {
     if (value === this.state.value) {
       this.props.actions.fetchExplore({userID: this.props.user.userID, value})
