@@ -332,15 +332,17 @@ router.post('/like', (req, response) => {
 
   if (req.body.liked == false)
     db.query(qLike, params, (err, res) => {
-      if (err) throw(err)
-
-      if (res.rowCount == 0) {
-        response.json({
-          id: null
-        })
-      } else {
-        response.json({id: req.body.id})
+      if (err) {
+        console.error(err)
+        return
       }
+        if (res.rowCount == 0) {
+          response.json({
+            id: null
+          })
+        } else {
+          response.json({id: req.body.id})
+        }
     })
   else 
     db.query(qDislike, params, (err, res) => {
@@ -593,3 +595,27 @@ router.post('/submit', (req, response) => {
   response.json({isSubmitted: true})
   
 })
+
+
+router.post('/chef/profile', (req, response) => {
+  const qProfile = `select * from chefs where chef_id = $1`
+
+  const params = [req.body.chef_id]
+
+  console.log(req.body)
+
+  db.query(qProfile, params)
+    .then(res => {
+      response.json({
+        id: res.rows[0].chef_id,
+        picture:  res.rows[0].chef_pic,
+        name:  res.rows[0].chef_name,
+        created_at:  res.rows[0].created_at
+      })
+    })
+    .catch(err => {
+      console.error(err.stack)
+    })
+})
+
+router.post('')

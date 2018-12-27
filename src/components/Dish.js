@@ -181,6 +181,11 @@ class Dish extends Component {
     this.props.actions.fetchDishSnaps(id)
     this.props.actions.fetchDishComments(id)
     this.props.actions.fetchDishChef(id, this.props.user.userID)
+    
+  }
+
+  componentDidUpdate() {
+    document.title = this.props.dish.recipe.name
   }
 
   handleChange = (event, value) => {

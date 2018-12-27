@@ -25,6 +25,7 @@ class Edit extends Component {
   }
 
   componentDidUpdate() {
+    document.title = this.props.edit.name == null ? 'Món mới' : 'Sửa' + this.props.edit.name
     document.getElementById('name').value = this.props.edit.name
     document.getElementById('description').value = this.props.edit.description
     this.props.edit.ingredients.map((ingredient, index) => {

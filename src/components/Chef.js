@@ -67,15 +67,20 @@ class Chef extends Component {
     this.props.actions.follow(target)
   }
 
-  componentDidMount() {
-    document.title = "Chef"
-    console.log(this.props.match)
-    if (this.props.match.params.id === "1215736495246283") console.log('fdfd')
+  componentWillMount() {
+    const id = this.props.match.params.id
+    console.log(this.props.match.params.id)
+
+    this.props.actions.fetchChefProfile(id)
   }
 
-  componentWillMount() {
-    console.log('ds')
+  componentDidMount() {
   }
+
+  componentDidUpdate() {
+  }
+
+
 
   render() {
     const { classes, actions, user } = this.props;
