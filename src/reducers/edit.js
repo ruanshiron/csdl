@@ -60,14 +60,14 @@ export default function dish(state = initialStae, action) {
       }
     case EDIT_IMAGE:
         state.steps.map((step, index) => {
-          if (index == action.payload.type.split('-')[1]) {
+          if (index === action.payload.type.split('-')[1]) {
             console.log(step)
             step.images[action.payload.type.split('-')[2]] = action.payload.src
           }
         })
       return {
         ...state,
-        picture: action.payload.type == 'picture' ? action.payload.src : state.picture,
+        picture: action.payload.type === 'picture' ? action.payload.src : state.picture,
       }
     case SUBMIT:
       console.log(action.payload)
