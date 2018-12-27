@@ -20,7 +20,7 @@ const styles = theme => ({
     flex: 1,
   },
   cardMedia: {
-    minHeight: 141, 
+    paddingTop: "56.25%", 
     height: '100%',// 16:9
   },
   cardContent: {
