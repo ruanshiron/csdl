@@ -346,6 +346,7 @@ export const fetchUploadBuffer = (data, type) => {
   return (dispath) => {
     return axios.post(API + 'buffer', data)
       .then(response => {
+        console.log({...response.data, type})
         dispath(editImage({...response.data, type}))
       })
       .catch(err => {
